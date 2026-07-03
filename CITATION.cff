@@ -8,7 +8,7 @@ authors:
   - family-names: Sahn
     given-names: Alexander
 type: dataset
-repository-code: https://github.com/alexandersahn/sf-planning-public-comment
+repository-code: https://github.com/alexandersahn/sf-planning-public-comment-data
 abstract: >-
   Agenda items, outcomes, and individual public comments (speaker name,
   polarity, comment summary, speaker role) parsed from every San Francisco
