@@ -101,7 +101,14 @@ def _draw_neighborhoods(ax):
     import json
     gj_path = ROOT / "data" / "raw" / "neighborhoods.geojson"
     if not gj_path.exists():
-        return
+        import requests
+        r = requests.get(
+            "https://data.sfgov.org/resource/ajp5-b2md.geojson",
+            params={"$limit": 120}, timeout=60)
+        if r.ok:
+            gj_path.write_bytes(r.content)
+        else:
+            return
     gj = json.load(open(gj_path))
     for feat in gj["features"]:
         geom = feat.get("geometry")
