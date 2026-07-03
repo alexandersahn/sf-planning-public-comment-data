@@ -1,0 +1,46 @@
+items: 25560
+items with record_id: 25560
+matched to DataSF project: 15518
+  ... of items with record_id: 60.7%
+
+DataSF match rate by year (items with record_id):
+  1998: 70.5%
+  1999: 75.1%
+  2000: 55.3%
+  2001: 65.3%
+  2002: 70.9%
+  2003: 67.9%
+  2004: 65.8%
+  2005: 63.6%
+  2006: 66.0%
+  2007: 63.0%
+  2008: 65.1%
+  2009: 59.1%
+  2010: 63.8%
+  2011: 60.4%
+  2012: 63.3%
+  2013: 64.1%
+  2014: 63.0%
+  2015: 52.8%
+  2016: 52.6%
+  2017: 58.2%
+  2018: 59.0%
+  2019: 61.5%
+  2020: 57.6%
+  2021: 57.1%
+  2022: 47.8%
+  2023: 53.1%
+  2024: 41.5%
+  2025: 42.9%
+  2026: 32.6%
+
+with coordinates: 16328
+
+action_final distribution:
+  (blank): 7463
+  continuance: 6542
+  approve: 5591
+  approve with conditions: 4443
+  no action: 1084
+  disapprove: 286
+  withdraw: 151

@@ -1,0 +1,19 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# raw downloads and intermediates are rebuilt by the pipeline; only the
+# release in public/ and the validation reports are committed
+data/raw/
+data/processed/
+data/validation/*.csv
+
+# the published AJPS replication archive lives on Dataverse
+# (doi:10.7910/DVN/WZOC7H), not in this repository
+replication_original/
+
+# local scratch
+scratch_*
+*.Rhistory

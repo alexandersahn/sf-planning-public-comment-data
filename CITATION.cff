@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: >-
+  If you use this dataset, please cite both the dataset and the
+  originating article.
+title: >-
+  San Francisco Planning Commission Public Comment Data, 1998-2026
+authors:
+  - family-names: Sahn
+    given-names: Alexander
+type: dataset
+repository-code: https://github.com/alexandersahn/sf-planning-public-comment
+abstract: >-
+  Agenda items, outcomes, and individual public comments (speaker name,
+  polarity, comment summary, speaker role) parsed from every San Francisco
+  Planning Commission meeting's minutes, January 1998 to present, joined to
+  San Francisco Planning Department project records. Extends and rebuilds
+  the data used in Sahn (2025), "Public Comment and Public Policy."
+preferred-citation:
+  type: article
+  title: Public Comment and Public Policy
+  authors:
+    - family-names: Sahn
+      given-names: Alexander
+  journal: American Journal of Political Science
+  year: 2025
+  volume: 69
+  issue: 2
+  start: 685
+  end: 700
+  doi: 10.1111/ajps.12900

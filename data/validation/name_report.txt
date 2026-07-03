@@ -1,0 +1,12 @@
+comment records: 74138
+with cleaned name: 63101
+unique names: 24020
+anonymous records: 3729
+garbage names blanked: 7756
+author-lookup merges applied: 1219
+fuzzy auto-merges applied: 834
+fuzzy candidates for review: 1258
+records with sign: 47587
+records with role_title: 688
+records with organization: 1322
+noise rows dropped: 448
