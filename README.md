@@ -1,8 +1,7 @@
 # San Francisco Planning Commission Public Comment Data, 1998–2026
 
-Who speaks at land-use hearings, what they say, and what the Planning
-Commission decides. This dataset parses **every San Francisco Planning
-Commission meeting's minutes from January 1998 to the present** into
+This dataset parses **every San Francisco Planning
+Commission meeting's minutes from January 1998 to July 2026** into
 structured records: agenda items with staff recommendations and commission
 actions, and each public comment with the speaker's name, recorded polarity
 (support / oppose / neutral), the stenographer's summary of what they said,
@@ -14,7 +13,28 @@ locations).
 comments · 24,020 unique speakers · January 1998 – March 2026. Updated
 periodically as new minutes are posted.
 
-## Relationship to the AJPS article
+## The data at a glance
+
+![Public comments per year, stacked by recorded polarity](public/figures/comments_by_year.png)
+
+The commission secretary records each speaker's polarity (+/−/=)
+systematically from about 2005 onward; earlier minutes mostly list names
+only (grey). Two further gaps (2006–08, 2012–13) reflect minutes that
+recorded comments without signs.
+
+![Opposition share among signed comments](public/figures/polarity_share.png)
+
+![Interest-group and project-team comments over time](public/figures/groups_over_time.png)
+
+Comments from registered neighborhood associations dominated the 2010s
+boom-era hearings, while pro-development (YIMBY/SPUR) commenting emerges
+almost from nothing after 2015.
+
+![Geocoded agenda items](public/figures/project_map.png)
+
+![Most frequent commenters](public/figures/top_commenters.png)
+
+Regenerate with `python pipeline/make_figures.py`.
 
 This dataset extends and rebuilds the data used in:
 
@@ -27,13 +47,7 @@ code behind the published results are permanently archived at the
 [AJPS Dataverse](https://doi.org/10.7910/DVN/WZOC7H). This repository is a
 successor build: the time series runs through the present rather than March
 2022, every meeting was re-scraped and re-parsed with a new pipeline, and
-several errors in the original data were corrected along the way (duplicate
-meetings, mis-dated minutes, and bullet-point continuation lines that were
-counted as additional negative speakers). Analyses run on this dataset will
-therefore differ — in most cases slightly, and in the case of
-negative-comment counts noticeably — from the published replication data.
-It also excludes the proprietary L2 voter-file variables (demographics,
-addresses, registration) that appear in the article.
+several bugs in the original data were corrected.
 
 ## The data (`public/`)
 
@@ -65,32 +79,6 @@ recorded (systematic from ~2005). For unsigned comments with text, a
 classifier trained on the 45k stenographer-signed comments imputes polarity
 (held-out accuracy 0.93 at the acceptance threshold); imputed values are in
 separate columns and flagged by `sign_source`. See `public/codebook.md`.
-
-## Rebuilding / updating
-
-```bash
-git clone <this repo> && cd <repo>
-./update.sh          # incremental refresh: new minutes + fresh DataSF pulls
-./update.sh --full   # additionally refreshes the Wayback staff panel
-```
-
-The pipeline (Python 3; see `requirements.txt`; `pdftotext` from poppler must
-be on PATH) is fully deterministic and incremental — already-downloaded
-minutes are cached in `data/raw/`, so a quarterly update only fetches new
-hearings. Stages, each a documented script in `pipeline/`:
-
-1. `scrape.py` / `retry_failed.py` — harvest and download all minutes
-2. `fetch_datasf.py` — DataSF project records and EAS geocoding data
-3. `build_items.py` — parse minutes into meetings / sections / items / vote blocks
-4. `build_comments.py` + `clean_names.py` — split speaker lists; clean names
-5. `build_projects.py` — outcome coding, DataSF join, geocoding
-6. `wayback_staff.py` + `assign_roles.py` — staff panel; role / interest-group classification
-7. `impute_polarity.py` — polarity model for unsigned comments
-8. `finalize.py` — assemble `public/`
-
-Every run writes coverage and quality reports to `data/validation/`
-(parse coverage vs. the published data, extraction-method shares, every name
-merge applied, classifier diagnostics, join rates).
 
 ## Citing
 

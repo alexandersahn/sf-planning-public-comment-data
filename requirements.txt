@@ -5,3 +5,4 @@ pandas
 rapidfuzz
 scikit-learn
 openpyxl
+matplotlib
