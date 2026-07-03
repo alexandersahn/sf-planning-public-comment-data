@@ -66,8 +66,11 @@ def fig_comments_by_year(com):
 
 
 def fig_polarity_share(com):
-    signed = com[com["sign"].isin(["+", "-"])]
-    g = signed.groupby("year")["sign"].value_counts().unstack(fill_value=0)
+    # stenographer sign where recorded, model/role-imputed otherwise
+    sign_all = com["sign"].fillna(com["sign_imputed"])
+    d = com.assign(sign_all=sign_all)
+    d = d[d["sign_all"].isin(["+", "-"])]
+    g = d.groupby("year")["sign_all"].value_counts().unstack(fill_value=0)
     g = g[(g["+"] + g["-"]) >= 100]  # years with too few signed comments mislead
     share = g["-"] / (g["+"] + g["-"])
     n = g.sum(axis=1)
@@ -75,9 +78,9 @@ def fig_polarity_share(com):
     ax.plot(share.index, share.values, color=NEG, lw=2)
     ax.scatter(share.index, share.values, s=10 + 40 * n / n.max(), color=NEG, zorder=3)
     ax.axhline(0.5, color="grey", lw=0.8, ls="--")
-    ax.set_ylabel("share of signed comments\nthat oppose")
+    ax.set_ylabel("share of polarized comments\nthat oppose")
     ax.set_ylim(0, 1)
-    ax.set_title("Opposition share among stenographer-signed public comments, staff excluded (point size ∝ volume)")
+    ax.set_title("Opposition share of public comments, recorded + imputed, staff excluded\n(point size ∝ volume)")
     fig.savefig(FIG / "polarity_share.png")
     plt.close(fig)
 
@@ -90,15 +93,17 @@ def fig_groups(com):
               "Housing Interest Groups": "#756bb1",
               "Pro-Development Interest Groups": "#2b8cbe",
               "Business Groups": "#31a354", "Social Interest Groups": "#c51b8a"}
-    g = (com[com["role_group"].isin(keep)]
-         .groupby(["year", "role_group"]).size().unstack(fill_value=0)
+    counts = (com[com["role_group"].isin(keep)]
+              .groupby(["year", "role_group"]).size().unstack(fill_value=0))
+    total = com.groupby("year").size()
+    g = (counts.div(total, axis=0)
          .rolling(3, center=True, min_periods=1).mean())
     fig, ax = plt.subplots(figsize=(8, 3.6))
     for col in keep:
         if col in g:
-            ax.plot(g.index, g[col], lw=1.8, color=colors[col], label=col)
-    ax.set_ylabel("comments per year (3-yr avg)")
-    ax.set_title("Interest-group and project-team comments over time")
+            ax.plot(g.index, 100 * g[col], lw=1.8, color=colors[col], label=col)
+    ax.set_ylabel("% of public comments (3-yr avg)")
+    ax.set_title("Interest-group and project-team share of public comments (staff excluded)")
     ax.legend(frameon=False, fontsize=8, ncol=2)
     fig.savefig(FIG / "groups_over_time.png")
     plt.close(fig)
