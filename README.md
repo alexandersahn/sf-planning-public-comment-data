@@ -17,13 +17,14 @@ periodically as new minutes are posted.
 
 ![Public comments per year, stacked by recorded polarity](public/figures/comments_by_year.png)
 
-Grey reflects the minutes themselves, not parsing gaps: 1998–2004 minutes
-mostly list speaker names only; 2006–08 minutes summarize comments in
-transcript style without polarity notations; and 2009–2012 minutes list
-names without signs or summaries. The secretary's systematic +/−/= notation
-begins in 2005 and is standard from 2013 on. A classifier imputes polarity
-for unsigned comments that have text (separate columns, never overwriting
-the stenographer).
+Staff and commissioner testimony is excluded. Solid colors are the
+commission secretary's own +/−/= notations (systematic from 2005, standard
+from 2013); lighter shades are model-imputed from the comment text where the
+secretary recorded none (mainly 2006–08, when minutes summarized comments in
+transcript style without polarity marks). Grey is not imputable: 1998–2004
+and 2009–2012 minutes mostly list speaker names with no comment text at all.
+Imputed values live in separate columns and never overwrite the
+stenographer's record.
 
 ![Opposition share among signed comments](public/figures/polarity_share.png)
 

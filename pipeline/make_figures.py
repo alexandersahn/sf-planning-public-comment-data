@@ -33,25 +33,33 @@ def load():
     com = pd.read_csv(PUB / "comments.csv", low_memory=False)
     com["year"] = com["meeting_date"].astype(str).str[:4].astype(int)
     com = com[com["year"].between(1998, 2026)]
+    # figures describe *public* comment: exclude staff and commissioners
+    com = com[(com["is_staff"] != 1) & (com["is_commissioner"] != 1)]
     items = pd.read_csv(PUB / "items.csv.gz", low_memory=False)
     return com, items
 
 
+POS_IMP, NEG_IMP, NEU_IMP = "#a8cee3", "#fcae91", "#cccccc"
+
+
 def fig_comments_by_year(com):
-    g = com.groupby(["year", com["sign"].fillna("none")]).size().unstack(fill_value=0)
-    for c in "+-=":
-        if c not in g:
-            g[c] = 0
-    fig, ax = plt.subplots(figsize=(8, 3.4))
+    cat = com["sign"].copy()
+    imputed = com["sign"].isna() & com["sign_imputed"].notna()
+    cat[imputed] = com.loc[imputed, "sign_imputed"] + "imp"
+    g = com.groupby(["year", cat.fillna("none")]).size().unstack(fill_value=0)
+    order = [("+", POS, "support (+)"), ("+imp", POS_IMP, "support (imputed)"),
+             ("-", NEG, "oppose (−)"), ("-imp", NEG_IMP, "oppose (imputed)"),
+             ("=", NEU, "neutral (=)"), ("=imp", NEU_IMP, "neutral (imputed)"),
+             ("none", GREY, "no sign, not imputable")]
+    fig, ax = plt.subplots(figsize=(8, 3.6))
     bottom = None
-    for key, color, label in [("+", POS, "support (+)"), ("-", NEG, "oppose (−)"),
-                              ("=", NEU, "neutral (=)"), ("none", GREY, "no recorded sign")]:
-        vals = g[key]
+    for key, color, label in order:
+        vals = g[key] if key in g else g.iloc[:, 0] * 0
         ax.bar(g.index, vals, bottom=bottom, color=color, label=label, width=0.8)
         bottom = vals if bottom is None else bottom + vals
     ax.set_ylabel("public comments")
-    ax.set_title("Public comments at the SF Planning Commission, by year and recorded polarity")
-    ax.legend(frameon=False, ncol=4, fontsize=8, loc="upper left")
+    ax.set_title("Public comments by year and polarity (staff testimony excluded)")
+    ax.legend(frameon=False, ncol=4, fontsize=7, loc="upper left")
     ax.set_xlim(1997.4, 2026.6)
     fig.savefig(FIG / "comments_by_year.png")
     plt.close(fig)
@@ -69,7 +77,7 @@ def fig_polarity_share(com):
     ax.axhline(0.5, color="grey", lw=0.8, ls="--")
     ax.set_ylabel("share of signed comments\nthat oppose")
     ax.set_ylim(0, 1)
-    ax.set_title("Opposition share among stenographer-signed comments (point size ∝ volume)")
+    ax.set_title("Opposition share among stenographer-signed public comments, staff excluded (point size ∝ volume)")
     fig.savefig(FIG / "polarity_share.png")
     plt.close(fig)
 
@@ -125,6 +133,7 @@ def _draw_neighborhoods(ax):
 
 
 def fig_map(items, com):
+    # com is already staff-excluded by load()
     n_com = (com.groupby("item_id").size().rename("n_comments"))
     d = items.dropna(subset=["latitude", "longitude"]).merge(
         n_com, left_on="item_id", right_index=True, how="left")
