@@ -34,13 +34,13 @@ DataSF match rate by year (items with record_id):
   2025: 42.9%
   2026: 32.6%
 
-with coordinates: 16328
+with coordinates: 16326
 
 action_final distribution:
-  (blank): 7463
-  continuance: 6542
-  approve: 5591
-  approve with conditions: 4443
-  no action: 1084
-  disapprove: 286
+  (blank): 7400
+  continuance: 6557
+  approve: 5623
+  approve with conditions: 4457
+  no action: 1085
+  disapprove: 287
   withdraw: 151

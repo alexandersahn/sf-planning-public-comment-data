@@ -195,6 +195,10 @@ BLOCK_RE = re.compile(
     r"[ \t]*(?:\n[ \t]*){0,2}:",
     re.IGNORECASE,
 )
+# mid-2000s minutes drop the colon: the label sits alone on a line
+BLOCK_NOCOLON_RE = re.compile(
+    r"(?m)^[ \t]*(SPEAKERS?|SPEAKER\(S\)|ACTION|AYES|NAYES|NOES|ABSENT|"
+    r"MOTION|RESOLUTION|EXCUSED|RECUSED)[ \t]*$")
 BLOCK_CANON = {
     "SPEAKER": "SPEAKERS", "SPEAKERS": "SPEAKERS", "SPEAKER(S)": "SPEAKERS",
     "NOES": "NAYES", "NES": "NAYES", "NAY": "NAYES", "NAYS": "NAYES", "NAYES": "NAYES",
@@ -273,6 +277,11 @@ def find_sections(text):
 def parse_blocks(item_text):
     """Split an item's text into description + labeled blocks."""
     matches = list(BLOCK_RE.finditer(item_text))
+    starts = set(m.start() for m in matches)
+    for m in BLOCK_NOCOLON_RE.finditer(item_text):
+        if m.start() not in starts:
+            matches.append(m)
+    matches.sort(key=lambda m: m.start())
     blocks = {}
     desc_end = matches[0].start() if matches else len(item_text)
     blocks["_description"] = item_text[:desc_end].strip()

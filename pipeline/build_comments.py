@@ -55,7 +55,11 @@ def main():
     item_meta = items.set_index("item_id")[["file", "meeting_date", "item_num"]]
     df = df.merge(item_meta[["file"]], left_on="item_id", right_index=True, how="left")
     same = df[df["method"] == "same_as"].copy()
-    ref_num = same["same_as"].str.extract(r"[Ii]tem\s+#?\s*(\d{1,2}[a-z]?)", expand=False)
+    # "Same as Item 9a." | "Same as those listed on 2a" | "See speakers for 12b."
+    ref_num = same["same_as"].str.extract(
+        r"(?i)(?:item|on|for)\s+#?\s*(\d{1,2}[a-z]?)\b", expand=False)
+    ref_num = ref_num.fillna(
+        same["same_as"].str.extract(r"(\d{1,2}[a-z]?)\s*\.?\s*$", expand=False))
     resolved_frames = []
     resolved_idx = set()
     lookup = df[df["method"] != "same_as"].groupby(

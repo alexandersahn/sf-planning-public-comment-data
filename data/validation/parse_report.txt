@@ -4,8 +4,8 @@ duplicate-meeting rows dropped: 142
 total items: 25560
 meetings: 1252
 items with record_id: 19897
-items with SPEAKERS: 18303
-items with ACTION: 18335
+items with SPEAKERS: 19017
+items with ACTION: 18399
 
 items by year:
   1998: 933

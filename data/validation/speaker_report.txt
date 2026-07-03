@@ -1,33 +1,35 @@
-SPEAKERS blocks: 18274
-comment records: 74480
-records with sign: 47347
+SPEAKERS blocks: 18988
+comment records: 77549
+records with sign: 48628
 
 blocks by method:
-  none: 8157 (44.6%)
-  sign_lines: 3407 (18.6%)
-  same_as: 1921 (10.5%)
-  dash_lines: 1174 (6.4%)
-  sign_inline: 1149 (6.3%)
-  comma_list: 1105 (6.0%)
-  single: 520 (2.8%)
-  first_line_name: 348 (1.9%)
-  re_pairs: 196 (1.1%)
+  none: 8141 (42.9%)
+  sign_lines: 3423 (18.0%)
+  same_as: 1920 (10.1%)
+  sign_inline: 1253 (6.6%)
+  dash_lines: 1172 (6.2%)
+  comma_list: 1125 (5.9%)
+  first_line_name: 739 (3.9%)
+  single: 554 (2.9%)
+  re_pairs: 215 (1.1%)
   tone_groups: 173 (0.9%)
-  unparsed: 79 (0.4%)
-  tone_prose: 42 (0.2%)
-  name_colon: 3 (0.0%)
+  bullet_names: 112 (0.6%)
+  unparsed: 89 (0.5%)
+  tone_prose: 66 (0.3%)
+  name_colon: 6 (0.0%)
 
 comment records by method:
-  sign_lines: 28914
-  same_as_resolved: 16811
-  comma_list: 10006
-  sign_inline: 8358
-  dash_lines: 4623
+  sign_lines: 29227
+  same_as_resolved: 17426
+  comma_list: 10159
+  sign_inline: 9034
+  dash_lines: 4378
   tone_groups: 2302
-  re_pairs: 1768
-  same_as_unresolved: 548
-  single: 520
-  first_line_name: 348
-  tone_prose: 196
-  unparsed: 79
-  name_colon: 7
+  re_pairs: 2138
+  bullet_names: 766
+  first_line_name: 739
+  single: 554
+  same_as_unresolved: 412
+  tone_prose: 304
+  unparsed: 89
+  name_colon: 21

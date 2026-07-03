@@ -246,6 +246,31 @@ def _parse_speakers(b):
             recs.append({"sign": None, "name_raw": nm, "comment": ""})
         return recs, "re_pairs"
 
+    # --- mid-2000s transcript style: name line, optional ", Title" line,
+    # then "-bullet" comment lines
+    name_lines = [i for i, ln in enumerate(lines)
+                  if is_name_like(ln.strip().rstrip(",")) and len(ln.split()) <= 4]
+    bullet_lines = [ln for ln in lines if re.match(r"^\s*-\S|^\s*-\s+\S", ln)]
+    if len(name_lines) >= 1 and len(bullet_lines) >= 2:
+        recs, cur = [], None
+        for ln in lines:
+            st = ln.strip()
+            if is_name_like(st.rstrip(",")) and len(st.split()) <= 4 \
+                    and not re.match(r"^\s*-", ln):
+                if cur:
+                    recs.append(cur)
+                cur = {"sign": None, "name_raw": st.rstrip(","), "comment": ""}
+            elif cur is not None:
+                if re.match(r"^\s*,", st):        # ", Deputy Director, ..." title line
+                    cur["name_raw"] += st         # re-attach; clean_names splits it
+                else:
+                    cur["comment"] = (cur["comment"] + " "
+                                      + re.sub(r"^\s*-\s*", "", st)).strip()
+        if cur:
+            recs.append(cur)
+        if len(recs) >= 1 and all(r["name_raw"] for r in recs):
+            return recs, "bullet_names"
+
     # --- E: comma list (entries may carry "Name – Org" suffixes) -----------
     joined = re.sub(r"\s*\n\s*", " ", b)
     n_dash = len(re.findall(r"\s[–—-]\s", joined))

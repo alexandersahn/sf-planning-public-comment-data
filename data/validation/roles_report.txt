@@ -1,42 +1,41 @@
-comment records: 74138
+comment records: 77143
 staff roster (from minutes attendance): 857 unique names
-records flagged is_staff: 4581
-records flagged is_commissioner: 2
-records with role_long: 15396
+records flagged is_staff: 4610
+records flagged is_commissioner: 0
+records with role_long: 15961
 
 role_long distribution:
-  Planning Staff: 4829
-  Neighborhood Association: 3429
-  Project Team: 3072
-  DR Team: 1009
-  Construction: 697
-  YIMBY: 616
-  Legal: 250
-  Tenant Association: 187
-  Social Services: 184
-  Race/Immigration/LGBTQ Groups: 173
-  Slow Growth: 161
-  Anti-Displacement: 146
-  Supervisor's Office: 143
-  Mayor's Office: 134
-  Religious: 79
+  Planning Staff: 4855
+  Neighborhood Association: 3611
+  Project Team: 3309
+  DR Team: 1063
+  Construction: 703
+  YIMBY: 618
+  Legal: 263
+  Social Services: 196
+  Tenant Association: 192
+  Race/Immigration/LGBTQ Groups: 176
+  Slow Growth: 166
+  Anti-Displacement: 152
+  Supervisor's Office: 149
+  Mayor's Office: 136
+  Religious: 77
   Affordable Housing Developer: 76
-  SPUR: 67
-  Commercial Association: 67
+  Commercial Association: 75
+  SPUR: 68
   Anti-Development: 43
   Chamber of Commerce: 19
   Community Benefit District: 14
-  Commissioner: 1
 
 role_group distribution:
-  Planning Staff: 4829
-  Neighborhood Association: 3429
-  Project Team: 3322
-  DR Team: 1009
-  Business Groups: 797
-  Pro-Development Interest Groups: 683
-  Housing Interest Groups: 613
-  Social Interest Groups: 436
-  Inter-Governmental: 278
+  Planning Staff: 4855
+  Neighborhood Association: 3611
+  Project Team: 3572
+  DR Team: 1063
+  Business Groups: 811
+  Pro-Development Interest Groups: 686
+  Housing Interest Groups: 629
+  Social Interest Groups: 449
+  Inter-Governmental: 285
 
-role-implied signs added: 709
+role-implied signs added: 957

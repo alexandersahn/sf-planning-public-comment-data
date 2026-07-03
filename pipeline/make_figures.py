@@ -96,47 +96,66 @@ def fig_groups(com):
     plt.close(fig)
 
 
-def fig_map(items):
-    d = items.dropna(subset=["latitude", "longitude"])
-    d = d[(d["latitude"].between(37.70, 37.84)) & (d["longitude"].between(-122.53, -122.35))]
-    com_counts = None
-    fig, ax = plt.subplots(figsize=(5.6, 5.6))
-    era = pd.cut(pd.to_numeric(d["meeting_date"].astype(str).str[:4]),
-                 [1997, 2007, 2017, 2027], labels=["1998–2007", "2008–2017", "2018–2026"])
-    for lab, color in zip(["1998–2007", "2008–2017", "2018–2026"],
-                          ["#fdae6b", "#e6550d", "#7f2704"]):
-        sub = d[era == lab]
-        ax.scatter(sub["longitude"], sub["latitude"], s=3, alpha=0.25,
-                   color=color, label=f"{lab}  (n={len(sub):,})", linewidths=0)
+def _draw_neighborhoods(ax):
+    """Light neighborhood outlines from DataSF Analysis Neighborhoods."""
+    import json
+    gj_path = ROOT / "data" / "raw" / "neighborhoods.geojson"
+    if not gj_path.exists():
+        return
+    gj = json.load(open(gj_path))
+    for feat in gj["features"]:
+        geom = feat.get("geometry")
+        if not geom or not geom.get("type"):
+            continue
+        polys = geom["coordinates"] if geom["type"] == "MultiPolygon" \
+            else [geom["coordinates"]]
+        for poly in polys:
+            ring = poly[0]
+            xs = [p[0] for p in ring]
+            ys = [p[1] for p in ring]
+            ax.fill(xs, ys, color="#f0efeb", zorder=0)
+            ax.plot(xs, ys, color="#d4d3cd", lw=0.7, zorder=1)
+
+
+def fig_map(items, com):
+    n_com = (com.groupby("item_id").size().rename("n_comments"))
+    d = items.dropna(subset=["latitude", "longitude"]).merge(
+        n_com, left_on="item_id", right_index=True, how="left")
+    d["n_comments"] = d["n_comments"].fillna(0)
+    d = d[(d["latitude"].between(37.70, 37.84))
+          & (d["longitude"].between(-122.53, -122.35))]
+
+    fig, ax = plt.subplots(figsize=(6.4, 6.4))
+    ax.set_facecolor("white")
+    _draw_neighborhoods(ax)
+
+    quiet = d[d["n_comments"] == 0]
+    ax.scatter(quiet["longitude"], quiet["latitude"], s=2.5, alpha=0.35,
+               color="#b5b5b0", linewidths=0, zorder=2,
+               label=f"no public comment  ({len(quiet):,})")
+    bins = [(1, 4, "#fdbe85", 5, .5), (5, 19, "#e6550d", 10, .6),
+            (20, 10**9, "#7f2704", 24, .8)]
+    for lo, hi, color, size, alpha in bins:
+        sub = d[d["n_comments"].between(lo, hi)]
+        lab = f"{lo}+ comments" if hi > 10**8 else f"{lo}–{hi} comments"
+        ax.scatter(sub["longitude"], sub["latitude"], s=size, alpha=alpha,
+                   color=color, linewidths=0, zorder=3,
+                   label=f"{lab}  ({len(sub):,})")
     ax.set_aspect(1 / 0.79)  # approx cos(latitude)
+    ax.set_xlim(-122.525, -122.35)
+    ax.set_ylim(37.703, 37.837)
     ax.set_xticks([]); ax.set_yticks([])
     ax.grid(False)
     for s in ax.spines.values():
         s.set_visible(False)
-    leg = ax.legend(frameon=False, fontsize=8, loc="lower left", markerscale=4)
+    leg = ax.legend(frameon=False, fontsize=8, loc="lower left",
+                    markerscale=2.2, title="agenda items, 1998–2026",
+                    title_fontsize=8, alignment="left")
     for lh in leg.legend_handles:
         lh.set_alpha(1)
-    ax.set_title("Agenda items heard by the Commission, geocoded (n={:,})".format(len(d)))
+    ax.set_title("Where the projects are — and where the comments go",
+                 fontsize=11)
     fig.savefig(FIG / "project_map.png")
-    plt.close(fig)
-
-
-def fig_top_commenters(com):
-    named = com[com["name_clean"].notna() & (com["name_clean"] != "")
-                & (com["is_staff"] != 1)]
-    top = named["name_clean"].value_counts().head(15)[::-1]
-    roles = {n: named.loc[named["name_clean"] == n, "role_group"].mode()
-             for n in top.index}
-    fig, ax = plt.subplots(figsize=(7, 4.2))
-    ax.barh(top.index, top.values, color="#2b8cbe")
-    for i, (n, v) in enumerate(top.items()):
-        r = roles[n]
-        lab = r.iloc[0] if len(r) else ""
-        ax.text(v + 8, i, str(lab), va="center", fontsize=7, color="dimgrey")
-    ax.set_xlabel("comments, 1998–2026")
-    ax.set_title("Most frequent public commenters (non-staff)")
-    ax.set_xlim(0, top.max() * 1.35)
-    fig.savefig(FIG / "top_commenters.png")
     plt.close(fig)
 
 
@@ -145,6 +164,6 @@ if __name__ == "__main__":
     fig_comments_by_year(com)
     fig_polarity_share(com)
     fig_groups(com)
-    fig_map(items)
-    fig_top_commenters(com)
+    fig_map(items, com)
+    (FIG / "top_commenters.png").unlink(missing_ok=True)
     print("wrote", len(list(FIG.glob("*.png"))), "figures to", FIG)

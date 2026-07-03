@@ -9,18 +9,21 @@ and the speaker's role or organizational affiliation. Items are joined to
 San Francisco Planning Department project records (unit counts, uses,
 locations).
 
-**Current coverage:** 1,252 meetings · 25,560 agenda items · 73,590 public
-comments · 24,020 unique speakers · January 1998 – March 2026. Updated
+**Current coverage:** 1,252 meetings · 25,560 agenda items · 76,731 public
+comments · 24,878 unique speakers · January 1998 – March 2026. Updated
 periodically as new minutes are posted.
 
 ## The data at a glance
 
 ![Public comments per year, stacked by recorded polarity](public/figures/comments_by_year.png)
 
-The commission secretary records each speaker's polarity (+/−/=)
-systematically from about 2005 onward; earlier minutes mostly list names
-only (grey). Two further gaps (2006–08, 2012–13) reflect minutes that
-recorded comments without signs.
+Grey reflects the minutes themselves, not parsing gaps: 1998–2004 minutes
+mostly list speaker names only; 2006–08 minutes summarize comments in
+transcript style without polarity notations; and 2009–2012 minutes list
+names without signs or summaries. The secretary's systematic +/−/= notation
+begins in 2005 and is standard from 2013 on. A classifier imputes polarity
+for unsigned comments that have text (separate columns, never overwriting
+the stenographer).
 
 ![Opposition share among signed comments](public/figures/polarity_share.png)
 
@@ -30,9 +33,7 @@ Comments from registered neighborhood associations dominated the 2010s
 boom-era hearings, while pro-development (YIMBY/SPUR) commenting emerges
 almost from nothing after 2015.
 
-![Geocoded agenda items](public/figures/project_map.png)
-
-![Most frequent commenters](public/figures/top_commenters.png)
+![Geocoded agenda items colored by comment volume](public/figures/project_map.png)
 
 Regenerate with `python pipeline/make_figures.py`.
 
