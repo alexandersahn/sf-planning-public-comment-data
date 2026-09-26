@@ -1,0 +1,643 @@
+name,role_long,n_stated,n_modal,agreement,year_lo,year_hi,distinct_roles
+ada chan,Anti-Displacement,4,3,0.75,1997,2007,2
+adam vanwater,City Agency,5,5,1.0,2013,2021,1
+adrian robinson,Community Benefit District,5,5,1.0,2010,2018,1
+adrian simi,Construction,18,18,1.0,2010,2021,1
+alex lansberg,Construction,4,4,1.0,2012,2029,1
+alex steiner,YIMBY,1,1,1.0,2021,2029,1
+alexis pelosi,Race/Immigration/LGBTQ Groups,1,1,1.0,2012,2020,1
+alfredo bohorquez,Construction,1,1,1.0,2015,2023,1
+alice knight,Affordable Housing Developer,1,1,1.0,2011,2019,1
+alice light,Affordable Housing Developer,6,6,1.0,2010,2020,1
+alicia bustos-sandoval,Tenant Association,2,2,1.0,2021,2029,1
+alicia sandoval,Tenant Association,1,1,1.0,2019,2027,1
+alicia sandoval bustos,Tenant Association,1,1,1.0,2019,2027,1
+amie fishman,Anti-Displacement,2,2,1.0,1997,2005,1
+amy beinart,Neighborhood Association,1,1,1.0,1999,2007,1
+amy chan,City Agency,1,1,1.0,2015,2023,1
+amy cohen,City Agency,3,3,1.0,2009,2018,1
+ana valdes,Religious,1,1,1.0,1999,2007,1
+anand singh,Construction,1,1,1.0,2019,2027,1
+anastasia yovanapolous,Tenant Association,2,2,1.0,2013,2024,1
+anastasia yovanopoulos,Tenant Association,4,3,0.75,2016,2026,2
+anastasia yovonapolous,Anti-Displacement,2,2,1.0,2013,2021,1
+andrew wood,Anti-Displacement,1,1,1.0,1996,2004,1
+angela montoya,Construction,1,1,1.0,2013,2021,1
+angela tickler,Commercial Association,1,1,1.0,2009,2017,1
+angelica cabande,Anti-Displacement,8,8,1.0,2001,2029,1
+angus mccarthy,Construction,7,7,1.0,1998,2008,1
+ann lim,Tenant Association,1,1,1.0,2021,2029,1
+ann wharton,Religious,1,1,1.0,1998,2006,1
+anne taupier,City Agency,9,9,1.0,2019,2029,1
+annette garcia,Affordable Housing Developer,1,1,1.0,2020,2028,1
+annie fryman,SPUR,4,4,1.0,2021,2029,1
+anthony urbina,Construction,1,1,1.0,2010,2018,1
+anthony waters,Construction,1,1,1.0,2018,2026,1
+antonia lopez,Affordable Housing Developer,1,1,1.0,2015,2023,1
+antonio diaz,Anti-Displacement,5,5,1.0,1996,2007,1
+antonio martinez,Race/Immigration/LGBTQ Groups,1,1,1.0,2020,2028,1
+april atkins,Construction,14,14,1.0,2016,2024,1
+april wai man ng,Anti-Displacement,7,7,1.0,2000,2009,1
+aristos kemiji,Affordable Housing Developer,1,1,1.0,2020,2028,1
+armie morgan,Construction,1,1,1.0,2019,2027,1
+armon morgan,Construction,1,1,1.0,2011,2019,1
+arnie morgan,Construction,2,2,1.0,2015,2023,1
+arturo marquez,Construction,1,1,1.0,2013,2021,1
+aurora grajeda,Anti-Displacement,2,2,1.0,1998,2006,1
+austin yang,City Agency,11,11,1.0,2019,2030,1
+azalia merrell,Construction,9,9,1.0,2000,2012,1
+azalia merrill,Construction,4,4,1.0,2001,2009,1
+azul cortez,Affordable Housing Developer,1,1,1.0,2015,2023,1
+bahia batia,City Agency,1,1,1.0,1999,2007,1
+barbara gualco,Social Services,8,8,1.0,2003,2023,1
+barbara misgunez,Neighborhood Association,1,1,1.0,2004,2012,1
+bella ramos,Religious,1,1,1.0,1997,2005,1
+ben van hauten,City Agency,1,1,1.0,2019,2027,1
+ben van houten,City Agency,2,2,1.0,2017,2029,1
+benjamin grant,SPUR,1,1,1.0,2013,2021,1
+bernard choden,Slow Growth,1,1,1.0,1997,2005,1
+bernie choden,Slow Growth,3,3,1.0,1997,2007,1
+betty traynor,Tenant Association,1,1,1.0,1999,2007,1
+bill blackwell,Construction,1,1,1.0,2015,2023,1
+bill sauro,Neighborhood Association,5,5,1.0,2005,2013,1
+blanca trujillo,Affordable Housing Developer,1,1,1.0,2015,2023,1
+bob marr,Construction,1,1,1.0,1999,2007,1
+bob prentiss,Religious,1,1,1.0,2013,2021,1
+bok pon,Neighborhood Association,1,1,1.0,2003,2011,1
+bonnie jean von krogh,City Agency,8,8,1.0,2019,2028,1
+brad willmore,Neighborhood Association,1,1,1.0,2001,2009,1
+brandon bracamonte,Construction,1,1,1.0,2022,2030,1
+brendan green,Construction,6,6,1.0,2021,2029,1
+brian baltimore,Social Services,2,2,1.0,2001,2009,1
+brian pritchard,Tenant Association,1,1,1.0,2016,2024,1
+briana morales,Pro-Housing Advocacy,11,11,1.0,2021,2029,1
+bridget maley,Slow Growth,17,12,0.706,2020,2029,2
+brook sampson,Neighborhood Association,1,1,1.0,2005,2013,1
+brooke samson,Neighborhood Association,3,3,1.0,2021,2029,1
+brother george cherrie,Religious,1,1,1.0,1998,2006,1
+brother kelley collin,Affordable Housing Developer,4,4,1.0,1998,2006,1
+brother robert brady,Religious,1,1,1.0,1999,2007,1
+bruce sterns,City Agency,1,1,1.0,2009,2017,1
+bryan stokel,City Agency,1,1,1.0,2019,2027,1
+buck bagot,Neighborhood Association,1,1,1.0,1997,2005,1
+cam su tu,Tenant Association,1,1,1.0,2019,2027,1
+carla short,City Agency,1,1,1.0,2010,2018,1
+carlos duran,Construction,6,6,1.0,2012,2020,1
+carlos romero,Affordable Housing Developer,2,2,1.0,1998,2006,1
+carlos zintella,Affordable Housing Developer,1,1,1.0,1999,2007,1
+carly payne,City Agency,1,1,1.0,2013,2021,1
+catherine stefani,Neighborhood Association,1,1,1.0,2000,2008,1
+cathy maupin,Community Benefit District,5,5,1.0,2010,2018,1
+cesar mendoza,Neighborhood Association,1,1,1.0,1999,2007,1
+charlie antoli,YIMBY,1,1,1.0,2021,2029,1
+charlie natoli,YIMBY,1,1,1.0,2021,2029,1
+charlie sciammas,Anti-Displacement,5,5,1.0,1999,2008,1
+chava kronenberg,City Agency,2,2,1.0,2020,2029,1
+chirag bhakta,Affordable Housing Developer,2,2,1.0,2015,2029,1
+chris armetrod,City Agency,1,1,1.0,2010,2018,1
+chris daly,Anti-Displacement,2,2,1.0,1996,2004,1
+chris durazo,Anti-Displacement,9,9,1.0,1999,2009,1
+chris martin,Neighborhood Association,1,1,1.0,2013,2021,1
+chris pugliese,Construction,2,2,1.0,2013,2021,1
+chris selig,Anti-Displacement,9,9,1.0,1998,2009,1
+christian parenti,Anti-Displacement,1,1,1.0,1996,2004,1
+christina caldron-olleja,City Agency,1,1,1.0,2010,2018,1
+christine linnenbach,Neighborhood Association,1,1,1.0,2001,2009,1
+christopher melgar,Race/Immigration/LGBTQ Groups,3,3,1.0,2021,2029,1
+cindy liou,Race/Immigration/LGBTQ Groups,1,1,1.0,2005,2013,1
+cissie bonini,Religious,1,1,1.0,1999,2007,1
+claude jacques,City Agency,1,1,1.0,1996,2004,1
+co-pastor elizabeth ekdale,Religious,2,2,1.0,1997,2005,1
+colin johnson,Construction,1,1,1.0,2021,2029,1
+colleen chawla,City Agency,1,1,1.0,2010,2018,1
+corneia sapiru,Religious,1,1,1.0,1998,2006,1
+craig adelman,Affordable Housing Developer,1,1,1.0,1997,2005,1
+crezia tano,City Agency,1,1,1.0,2008,2016,1
+cris french,Historic Preservation,3,3,1.0,2019,2027,1
+cris sielig,Anti-Displacement,1,1,1.0,1998,2006,1
+crista alarcon luna,Affordable Housing Developer,1,1,1.0,2021,2029,1
+cristina olagin,Anti-Displacement,2,2,1.0,1998,2006,1
+cristine evans,Commercial Association,5,5,1.0,2021,2029,1
+cynthia gomez,Construction,25,25,1.0,2013,2030,1
+cyril yu,City Agency,4,4,1.0,2014,2022,1
+d. allen,Social Services,1,1,1.0,1999,2007,1
+dale hernandez,Construction,1,1,1.0,2010,2018,1
+dan cope,Construction,3,3,1.0,2005,2013,1
+dan fujioka,Race/Immigration/LGBTQ Groups,1,1,1.0,1998,2006,1
+dan mckenna,City Agency,1,1,1.0,1996,2004,1
+dan rush,Construction,1,1,1.0,2010,2018,1
+dan solberg,Religious,3,3,1.0,2012,2020,1
+dan torres,Construction,5,5,1.0,2018,2029,1
+dana ketcham,City Agency,1,1,1.0,2016,2024,1
+daniel greg,Construction,4,4,1.0,2017,2025,1
+daniel laforte,City Agency,1,1,1.0,2001,2009,1
+daniel sheeter,City Agency,1,1,1.0,2017,2025,1
+danny campbell,Construction,6,6,1.0,2011,2023,1
+danny leone,Neighborhood Association,1,1,1.0,1996,2004,1
+dante johnson,Construction,2,2,1.0,2012,2020,1
+daphyne benson,Anti-Displacement,2,2,1.0,1998,2006,1
+darcy bender,City Agency,1,1,1.0,2017,2025,1
+darton ito,City Agency,1,1,1.0,2018,2026,1
+dave holguin,Construction,1,1,1.0,1997,2005,1
+dave osgood,Tenant Association,5,5,1.0,2005,2013,1
+david beaupre,City Agency,4,4,1.0,2019,2027,1
+david casstianus,Religious,1,1,1.0,2010,2018,1
+david greenbaum,Religious,1,1,1.0,2021,2029,1
+david harlan,Construction,1,1,1.0,2013,2021,1
+david hyman,Race/Immigration/LGBTQ Groups,1,1,1.0,2014,2022,1
+david kim,YIMBY,5,5,1.0,2021,2029,1
+david lupo,Construction,4,4,1.0,1999,2007,1
+david mcguire,Anti-Displacement,2,2,1.0,1998,2006,1
+david moore,City Agency,1,1,1.0,2022,2030,1
+david pilprey,City Agency,1,1,1.0,2010,2018,1
+david serrano,Tenant Association,1,1,1.0,2016,2024,1
+david woo,Race/Immigration/LGBTQ Groups,6,6,1.0,2020,2029,1
+dawn trennert,Neighborhood Association,2,2,1.0,2005,2014,1
+deborah borne,City Agency,1,1,1.0,2017,2025,1
+deby gonzales,Tenant Association,1,1,1.0,1999,2007,1
+deepa varma,Tenant Association,1,1,1.0,2015,2023,1
+dega monrier,Labor,3,3,1.0,2010,2018,1
+denise lapointe,Neighborhood Association,1,1,1.0,2001,2009,1
+dennis carlin,Construction,1,1,1.0,1998,2006,1
+dennis edelman,Race/Immigration/LGBTQ Groups,1,1,1.0,2014,2022,1
+dennis laboth,Neighborhood Association,1,1,1.0,2000,2008,1
+dennis lumsy,Construction,3,3,1.0,2012,2021,1
+deputy chief brannan,City Agency,2,2,1.0,2021,2029,1
+deputy chief monica fields,City Agency,4,4,1.0,2007,2015,1
+diana ponce de leon,City Agency,3,2,0.667,2009,2023,2
+diane oshima,City Agency,5,5,1.0,1997,2027,1
+dick millet,Neighborhood Association,17,17,1.0,1996,2013,1
+diego hernandez,Construction,1,1,1.0,2014,2022,1
+don andreini,Historic Preservation,1,1,1.0,1996,2004,1
+don faulk,Affordable Housing Developer,2,2,1.0,2012,2020,1
+don marcos,Religious,1,1,1.0,2010,2018,1
+don mcdonald,City Agency,2,2,1.0,1998,2006,1
+don morkel,Construction,1,1,1.0,2001,2009,1
+don wilson,Neighborhood Association,1,1,1.0,1997,2005,1
+dorothy peterson,Neighborhood Association,1,1,1.0,2002,2010,1
+doug shoemaker,Social Services,2,2,1.0,2009,2017,1
+douglass nelson,City Agency,1,1,1.0,2001,2009,1
+dustin dun,Anti-Displacement,1,1,1.0,2000,2008,1
+dusting hart,Religious,3,3,1.0,2012,2020,1
+easter calvett,Construction,1,1,1.0,2013,2021,1
+ed reiskin,City Agency,1,1,1.0,2011,2019,1
+eddie reyes,Construction,1,1,1.0,2018,2026,1
+eileen fanelli,Religious,1,1,1.0,1998,2006,1
+elizabeth kuwada,Social Services,3,3,1.0,2020,2028,1
+ellouise patton,Social Services,3,3,1.0,1998,2008,1
+elsa gualive,Anti-Displacement,1,1,1.0,1999,2007,1
+elyse casey,Religious,1,1,1.0,2013,2021,1
+emanuel sanchez,Construction,1,1,1.0,2021,2029,1
+emily abraham,Commercial Association,1,1,1.0,2017,2025,1
+emily lee,City Agency,3,2,0.667,2009,2018,2
+emily lin,Affordable Housing Developer,1,1,1.0,2010,2018,1
+eric arguello,Race/Immigration/LGBTQ Groups,10,10,1.0,2020,2030,1
+eric quesada,Anti-Displacement,26,24,0.923,1996,2009,2
+eric woo,Affordable Housing Developer,1,1,1.0,2021,2029,1
+erika mclitus,SPUR,3,3,1.0,2021,2029,1
+erin grucz,Historic Preservation,1,1,1.0,2001,2009,1
+erwin kotn,Construction,1,1,1.0,2010,2018,1
+eva yovonapolous,Tenant Association,1,1,1.0,2014,2022,1
+felix flores,Religious,1,1,1.0,2012,2020,1
+fergal clancy,City Agency,1,1,1.0,2017,2025,1
+fernando marti,Race/Immigration/LGBTQ Groups,6,5,0.833,2001,2009,2
+fernando perez,Anti-Displacement,2,2,1.0,1998,2006,1
+forrest chamberlain,City Agency,1,1,1.0,2019,2027,1
+francesca romero,Commercial Association,5,5,1.0,2021,2029,1
+francisco da costa,City Agency,2,2,1.0,2010,2020,1
+friar louis vitalle,Religious,1,1,1.0,1999,2007,1
+gabriel braden metcalf,SPUR,2,2,1.0,1998,2006,1
+gabriel metcalf,SPUR,2,2,1.0,1998,2006,1
+gabriela ruiz,Affordable Housing Developer,2,2,1.0,2021,2029,1
+garreth miller,City Agency,1,1,1.0,2021,2029,1
+gary brickley,Tenant Association,1,1,1.0,2012,2020,1
+gary gregorson,Construction,1,1,1.0,2015,2023,1
+gaylord hernandez,Construction,1,1,1.0,2014,2022,1
+gen fujioka,Race/Immigration/LGBTQ Groups,4,3,0.75,1997,2029,2
+gene burbank,Religious,1,1,1.0,1998,2006,1
+george broder,Commercial Association,3,3,1.0,2010,2018,1
+george williams,SPUR,10,10,1.0,1999,2009,1
+georgia schuttish,Tenant Association,2,2,1.0,2013,2026,1
+german edwards,Tenant Association,1,1,1.0,2000,2008,1
+gerry crowley,Neighborhood Association,8,8,1.0,1997,2014,1
+giovanni hernandez,Construction,1,1,1.0,2014,2022,1
+giti dadlani,Tenant Association,1,1,1.0,2007,2015,1
+glen jordan,Race/Immigration/LGBTQ Groups,1,1,1.0,2014,2022,1
+greg hanson,Neighborhood Association,1,1,1.0,1998,2006,1
+greg harteman,Construction,5,5,1.0,2020,2029,1
+greg wagner,City Agency,1,1,1.0,2018,2026,1
+gretchen paule,City Agency,1,1,1.0,2015,2023,1
+guadalupe arriola,Anti-Displacement,1,1,1.0,2003,2011,1
+gwen mclaughlin,Commercial Association,5,5,1.0,2021,2029,1
+gwyneth borden,Commercial Association,1,1,1.0,1997,2005,1
+homer wong,Religious,1,1,1.0,1998,2006,1
+howard picket,Commercial Association,1,1,1.0,2011,2019,1
+ian lewis,Construction,1,1,1.0,2001,2009,1
+inspector ganster,City Agency,1,1,1.0,2000,2008,1
+iris biblowitz,Tenant Association,1,1,1.0,2014,2022,1
+j.r. eppler,Neighborhood Association,2,2,1.0,2012,2020,1
+jack lee,Religious,3,3,1.0,2021,2029,1
+jackie morales,YIMBY,1,1,1.0,2021,2029,1
+jaime ross,Commercial Association,1,1,1.0,2000,2008,1
+jake badiardi,Construction,2,2,1.0,2012,2020,1
+jalal heydari,Neighborhood Association,1,1,1.0,2004,2012,1
+james hom,Construction,1,1,1.0,1997,2005,1
+james wisner,Religious,1,1,1.0,1999,2007,1
+jan womer,Religious,2,2,1.0,1997,2005,1
+jan wood,Neighborhood Association,3,3,1.0,2004,2014,1
+jane edwards,Religious,1,1,1.0,2011,2019,1
+janet carpinelli,Neighborhood Association,1,1,1.0,2010,2018,1
+jason henderson,Neighborhood Association,1,1,1.0,2009,2017,1
+javier flores,Construction,9,9,1.0,2010,2023,1
+jay anthony manjivar,Construction,1,1,1.0,2021,2029,1
+jay anthony menjivar,Construction,1,1,1.0,2022,2030,1
+jay bradshaw,Construction,4,4,1.0,1999,2020,1
+jazzie collins,Anti-Displacement,2,2,1.0,2002,2010,1
+jazzy collins,Anti-Displacement,1,1,1.0,2005,2013,1
+jean neblett,Neighborhood Association,3,3,1.0,2005,2013,1
+jeff buckley,City Agency,1,1,1.0,2011,2019,1
+jeff gillman,City Agency,1,1,1.0,2009,2017,1
+jennifer fieber,Tenant Association,2,2,1.0,2015,2023,1
+jennifer sobol,City Agency,1,1,1.0,1999,2007,1
+jennifer warburg,SPUR,6,6,1.0,2010,2018,1
+jenniffer blecha,Religious,1,1,1.0,2012,2020,1
+jenny barragan,Affordable Housing Developer,1,1,1.0,2015,2023,1
+jenny batallones,Anti-Displacement,1,1,1.0,1997,2005,1
+jerry dratler,Tenant Association,1,1,1.0,2019,2027,1
+jesse johnson,Construction,1,1,1.0,2020,2028,1
+jessica anderson,Religious,1,1,1.0,2012,2020,1
+jessie oliver sanford,Race/Immigration/LGBTQ Groups,2,2,1.0,2017,2025,1
+jesus villalobos,Construction,3,3,1.0,2011,2023,1
+jill simpson-rodby,City Agency,1,1,1.0,1999,2007,1
+jim chappell,SPUR,11,11,1.0,1996,2023,1
+jim dudley,City Agency,1,1,1.0,2005,2013,1
+jim furth,Construction,1,1,1.0,1996,2004,1
+jim hewitt,Neighborhood Association,1,1,1.0,1997,2005,1
+jim keith,Construction,4,4,1.0,2000,2008,1
+jim killoran,Race/Immigration/LGBTQ Groups,1,1,1.0,1996,2004,1
+jim koehler,Construction,1,1,1.0,2006,2014,1
+jim lazarus,Commercial Association,1,1,1.0,2004,2012,1
+jim salinas,Construction,24,24,1.0,1999,2021,1
+"jim salinas, sr",Construction,6,6,1.0,2001,2009,1
+jim tatarazuk,Tenant Association,1,1,1.0,2005,2013,1
+jimmy nguyen,Race/Immigration/LGBTQ Groups,1,1,1.0,2009,2017,1
+joanne desmond,Construction,5,5,1.0,2010,2018,1
+joaquin torres,City Agency,1,1,1.0,2013,2021,1
+joaquin turner,Affordable Housing Developer,1,1,1.0,2000,2008,1
+joe boss,Neighborhood Association,5,5,1.0,1997,2007,1
+joe butler,Neighborhood Association,1,1,1.0,2004,2012,1
+joe cassedy,Construction,1,1,1.0,2001,2009,1
+joe delesandro,Commercial Association,5,5,1.0,2010,2018,1
+joe latorre,City Agency,1,1,1.0,1996,2004,1
+joe luttrell,Neighborhood Association,1,1,1.0,1996,2004,1
+joe o ?donahue,Construction,1,1,1.0,1996,2004,1
+joe o' donaghue,Construction,1,1,1.0,1997,2005,1
+joe o'donaghue,Construction,37,36,0.973,1997,2018,2
+joe o'donoghue,Construction,5,5,1.0,1997,2010,1
+joe o?donaghue,Construction,1,1,1.0,1996,2004,1
+joe sanders,Construction,6,6,1.0,2018,2029,1
+joel casy,Construction,1,1,1.0,1996,2004,1
+john a. balleza,Religious,5,5,1.0,2001,2009,1
+john anthony,Construction,2,2,1.0,2021,2030,1
+john corso,Construction,7,7,1.0,2013,2029,1
+john elberling,Affordable Housing Developer,7,7,1.0,2009,2023,1
+john goldman,Religious,1,1,1.0,2012,2020,1
+john jimenez,Anti-Displacement,1,1,1.0,2013,2021,1
+john know-white,City Agency,1,1,1.0,2013,2021,1
+john korso,Construction,1,1,1.0,2018,2026,1
+john mendoza,Race/Immigration/LGBTQ Groups,1,1,1.0,2014,2022,1
+john olivera,Construction,2,2,1.0,1999,2007,1
+john reuna,Tenant Association,1,1,1.0,2009,2017,1
+john stewart,Neighborhood Association,1,1,1.0,1997,2005,1
+john wetzel,Anti-Displacement,1,1,1.0,1996,2004,1
+jonathan cherry,City Agency,13,13,1.0,2020,2029,1
+jorge arguello,Race/Immigration/LGBTQ Groups,1,1,1.0,2022,2030,1
+jorge rivas,City Agency,1,1,1.0,2014,2022,1
+joseph duffy,City Agency,1,1,1.0,2018,2026,1
+joseph smooke,Neighborhood Association,2,2,1.0,1998,2007,1
+josh garcia,Religious,1,1,1.0,2009,2017,1
+jossiel cruseta,City Agency,1,1,1.0,2020,2028,1
+joyce alicy,City Agency,1,1,1.0,2001,2009,1
+joyce lee,Affordable Housing Developer,3,3,1.0,2014,2022,1
+jr nebler,City Agency,1,1,1.0,2011,2019,1
+judith berkowitz,Slow Growth,3,2,0.667,1999,2012,2
+judith gatewood,Construction,2,2,1.0,2000,2008,1
+judy berkowitz,Slow Growth,4,4,1.0,1999,2011,1
+judy irving,Neighborhood Association,3,3,1.0,2021,2029,1
+julia mccray- goldsmith,Religious,1,1,1.0,2012,2020,1
+julie daniel,YIMBY,1,1,1.0,2021,2029,1
+julie fisher,Labor,3,3,1.0,2021,2029,1
+julio payes,Construction,2,2,1.0,2016,2024,1
+justin dolezal,Commercial Association,4,4,1.0,2021,2029,1
+kaen simonex,Race/Immigration/LGBTQ Groups,1,1,1.0,2012,2020,1
+karen cubin,City Agency,1,1,1.0,2013,2021,1
+karen flood,Construction,3,3,1.0,2014,2022,1
+karen pierce,City Agency,1,1,1.0,2019,2027,1
+kari kilstrom,City Agency,1,1,1.0,2017,2025,1
+karoleen feng,Affordable Housing Developer,7,7,1.0,2015,2028,1
+karsten peters,Religious,1,1,1.0,1999,2007,1
+kate hartley,City Agency,1,1,1.0,2013,2021,1
+kate hurtley,City Agency,1,1,1.0,2010,2018,1
+kate sofis,City Agency,3,3,1.0,2017,2027,1
+katherine howard,Slow Growth,1,1,1.0,2021,2029,1
+katherine petrin,Historic Preservation,3,3,1.0,2021,2029,1
+kathleen dooley,Neighborhood Association,1,1,1.0,2004,2012,1
+kathy jung,City Agency,1,1,1.0,2018,2026,1
+kathy lipscomb,Tenant Association,1,1,1.0,2016,2024,1
+katie lamont,Affordable Housing Developer,2,2,1.0,2020,2029,1
+keith howell,Construction,1,1,1.0,2014,2022,1
+keith ward,Labor,3,3,1.0,2010,2018,1
+keith wilson,Neighborhood Association,1,1,1.0,2006,2014,1
+ken nim,City Agency,1,1,1.0,2015,2023,1
+kevin carroll,Commercial Association,9,9,1.0,2009,2018,1
+kevin kitschner,City Agency,3,3,1.0,2013,2021,1
+kevin ortiz,Race/Immigration/LGBTQ Groups,1,1,1.0,2015,2023,1
+kieran buckley,Construction,1,1,1.0,1998,2006,1
+kingmond young,Neighborhood Association,1,1,1.0,1997,2005,1
+kirsten jensen,City Agency,1,1,1.0,2022,2030,1
+kristen jensen,City Agency,2,2,1.0,2019,2027,1
+kristy wong,SPUR,10,10,1.0,2011,2020,1
+lamar heystek,Race/Immigration/LGBTQ Groups,1,1,1.0,2014,2022,1
+larry dannenberg,Religious,3,3,1.0,2012,2020,1
+larry mazzola jr,Construction,1,1,1.0,2012,2020,1
+larry mizola,Construction,1,1,1.0,2013,2021,1
+laura roland,Construction,1,1,1.0,2003,2011,1
+laurel arvanitidis,City Agency,3,3,1.0,2017,2028,1
+laurie brook,Slow Growth,1,1,1.0,2021,2029,1
+laurie brooke,Slow Growth,1,1,1.0,2021,2029,1
+lawrence thibeaux,Labor,1,1,1.0,1997,2005,1
+layla stanley,Tenant Association,1,1,1.0,2017,2025,1
+leah faley,Construction,1,1,1.0,2015,2023,1
+leah fiegler,Construction,2,2,1.0,2015,2023,1
+leah johnson,Race/Immigration/LGBTQ Groups,1,1,1.0,2021,2029,1
+lee lutensky,City Agency,1,1,1.0,2012,2020,1
+leigh lutenski,City Agency,22,22,1.0,2014,2029,1
+leo cassidy,Construction,3,3,1.0,1996,2006,1
+leonard basocco,Construction,2,2,1.0,2015,2023,1
+leonard basoco,Construction,4,4,1.0,2016,2026,1
+leonard desoko,Construction,5,5,1.0,2015,2023,1
+leslie dreyer,Tenant Association,1,1,1.0,2013,2021,1
+leslie lenheart,Construction,1,1,1.0,2000,2008,1
+leslie leonhardt,Construction,1,1,1.0,1999,2007,1
+lian ladia,Anti-Displacement,1,1,1.0,2015,2023,1
+liann matchie,Construction,4,4,1.0,1997,2005,1
+lilian backtor,Affordable Housing Developer,1,1,1.0,1999,2007,1
+linda pasquinucci,Religious,1,1,1.0,1999,2007,1
+linda shah,Religious,1,1,1.0,2021,2029,1
+linda shoemaker,Race/Immigration/LGBTQ Groups,1,1,1.0,2008,2016,1
+lisa aubrey,Anti-Displacement,1,1,1.0,2016,2024,1
+lisa began,Affordable Housing Developer,1,1,1.0,1999,2007,1
+lisa pagan,City Agency,5,5,1.0,2013,2022,1
+liz brisson,City Agency,1,1,1.0,2010,2018,1
+lois decastro,Religious,1,1,1.0,1999,2007,1
+lori brooke,Slow Growth,2,2,1.0,2021,2029,1
+lowell afdahl rice,City Agency,1,1,1.0,2021,2029,1
+lucile elnardo,Construction,4,4,1.0,2011,2019,1
+luis granados,Anti-Displacement,6,4,0.667,1997,2023,2
+luis lima,Construction,4,4,1.0,2021,2029,1
+luther gary,Construction,1,1,1.0,2015,2023,1
+lynn jefferson,Neighborhood Association,2,2,1.0,2004,2012,1
+malachi maddox,Religious,1,1,1.0,1999,2007,1
+manny flores,Construction,17,17,1.0,1999,2015,1
+manuel flores,Construction,3,3,1.0,2004,2012,1
+margot antonetty,City Agency,2,2,1.0,1999,2007,1
+maria barrera,Affordable Housing Developer,1,1,1.0,2015,2023,1
+maria hordes,Affordable Housing Developer,1,1,1.0,2015,2023,1
+maria ocon,Construction,1,1,1.0,2006,2014,1
+marie alice dumabeiller,Religious,1,1,1.0,1999,2007,1
+marie sorenson,Race/Immigration/LGBTQ Groups,4,4,1.0,2021,2029,1
+marina secchitano,Labor,1,1,1.0,1999,2007,1
+marissa rodriguez,Commercial Association,1,1,1.0,2019,2027,1
+mark christensen,Neighborhood Association,1,1,1.0,1999,2007,1
+mark fisher,Religious,1,1,1.0,1999,2007,1
+mark hooshmand,Tenant Association,1,1,1.0,2019,2027,1
+mark leasy,Construction,1,1,1.0,2013,2021,1
+mark lynch,Neighborhood Association,1,1,1.0,1997,2005,1
+mark maloof,Labor,1,1,1.0,2022,2030,1
+mark mcnamara,Anti-Displacement,1,1,1.0,2015,2023,1
+markus alvarez,Construction,1,1,1.0,2021,2029,1
+marsha garland,Neighborhood Association,5,5,1.0,2000,2012,1
+martha sanchez,Race/Immigration/LGBTQ Groups,2,2,1.0,2021,2029,1
+marti dulalas,Anti-Displacement,1,1,1.0,2021,2029,1
+martin dalton,Construction,3,3,1.0,1999,2007,1
+martin urban,Tenant Association,1,1,1.0,2002,2010,1
+martin wankazoo,Race/Immigration/LGBTQ Groups,1,1,1.0,1996,2004,1
+marty borrego,Anti-Displacement,1,1,1.0,2000,2008,1
+marty dulalas,Anti-Displacement,2,2,1.0,2021,2029,1
+mary ann miller,Slow Growth,5,5,1.0,1996,2007,1
+mary gleason,Labor,17,17,1.0,2002,2029,1
+mary lipian,Neighborhood Association,1,1,1.0,2010,2018,1
+mary rose hayes,Neighborhood Association,1,1,1.0,2020,2028,1
+mathew hirsch,Tenant Association,1,1,1.0,2013,2021,1
+matt regan,Commercial Association,6,6,1.0,2004,2029,1
+mauricio chavez,Construction,8,8,1.0,2019,2029,1
+max gara,City Agency,1,1,1.0,2019,2027,1
+maxwell gara,City Agency,1,1,1.0,2021,2029,1
+meg wollen,City Agency,1,1,1.0,2007,2015,1
+megan smith,Historic Preservation,2,2,1.0,2020,2028,1
+megan wier,City Agency,1,1,1.0,2010,2018,1
+mel washington,Commercial Association,1,1,1.0,1997,2005,1
+merle malakoff,Social Services,1,1,1.0,2000,2008,1
+michael chavis,Construction,5,5,1.0,2013,2021,1
+michael lagomarsino,Construction,2,2,1.0,2015,2023,1
+michael nulty,Tenant Association,2,2,1.0,1999,2013,1
+michael rothman,Neighborhood Association,1,1,1.0,2022,2030,1
+michael theriot,Construction,1,1,1.0,2012,2020,1
+michael tornabene,SPUR,1,1,1.0,2006,2014,1
+michael williams,Construction,4,3,0.75,2005,2017,2
+michelle fonseca,Race/Immigration/LGBTQ Groups,2,2,1.0,2021,2029,1
+michelle reiss,Affordable Housing Developer,1,1,1.0,2015,2023,1
+mike brown,Construction,1,1,1.0,2004,2012,1
+mike buhler,Historic Preservation,1,1,1.0,2010,2018,1
+mike martin,City Agency,3,3,1.0,2010,2021,1
+mike mullen,City Agency,12,12,1.0,2021,2029,1
+mimiam zamora,Religious,2,2,1.0,1998,2006,1
+miriam surrel,City Agency,1,1,1.0,2010,2018,1
+mirkarimi; william ho,Neighborhood Association,1,1,1.0,2005,2013,1
+mitch mankin,Affordable Housing Developer,5,5,1.0,2021,2029,1
+moe jamile,Neighborhood Association,1,1,1.0,2013,2021,1
+monica garcia,Affordable Housing Developer,1,1,1.0,1999,2007,1
+monica munowitch,City Agency,1,1,1.0,2018,2026,1
+my do,Anti-Displacement,7,6,0.857,2000,2008,2
+nan roth,Neighborhood Association,2,2,1.0,2004,2012,1
+nate alby,Race/Immigration/LGBTQ Groups,1,1,1.0,2012,2020,1
+neville pereira,City Agency,1,1,1.0,2019,2027,1
+nick ferris,Neighborhood Association,4,4,1.0,2021,2029,1
+nick pagalagos,Anti-Displacement,2,2,1.0,2001,2009,1
+nilka julio,Construction,3,3,1.0,2000,2008,1
+noreen medina,Anti-Displacement,2,2,1.0,2021,2029,1
+norman rolfe,Slow Growth,10,10,1.0,1996,2009,1
+ob zaret,City Agency,1,1,1.0,2010,2018,1
+olga miranda,Labor,2,2,1.0,2021,2029,1
+oriana ides,Neighborhood Association,1,1,1.0,1997,2005,1
+oscar masariegos,Construction,1,1,1.0,2019,2027,1
+owen o'donnell,City Agency,1,1,1.0,2010,2018,1
+ozzie rahm,Tenant Association,1,1,1.0,2013,2021,1
+ozzy rohm,Tenant Association,1,1,1.0,2021,2029,1
+pam dannenberg,Religious,3,3,1.0,2012,2020,1
+pam sims,City Agency,1,1,1.0,2010,2018,1
+pamela levin,City Agency,1,1,1.0,2009,2017,1
+patricia boyd,City Agency,1,1,1.0,2018,2026,1
+patricia vaughey,Neighborhood Association,5,3,0.6,1998,2021,3
+patrick gollier,City Agency,1,1,1.0,2010,2018,1
+patrick o'riordan,City Agency,8,8,1.0,2014,2023,1
+paul leoni,Affordable Housing Developer,1,1,1.0,2015,2023,1
+paul olsen,Neighborhood Association,3,3,1.0,2004,2012,1
+paul wermer,Neighborhood Association,1,1,1.0,2021,2029,1
+pauline peele,Neighborhood Association,1,1,1.0,2002,2010,1
+pedestrian program manager,City Agency,1,1,1.0,2004,2012,1
+penny clifton,Neighborhood Association,1,1,1.0,1997,2005,1
+peter cohen,Race/Immigration/LGBTQ Groups,1,1,1.0,2002,2010,1
+peter garza,Construction,3,3,1.0,2010,2018,1
+peter lewis,Neighborhood Association,5,5,1.0,2003,2011,1
+peter o'hara,Neighborhood Association,1,1,1.0,1999,2007,1
+peter papadapoulos,Affordable Housing Developer,1,1,1.0,2014,2022,1
+peter winkelstein,SPUR,1,1,1.0,1999,2007,1
+peter ziblatt,Religious,1,1,1.0,2015,2023,1
+petree knighton,Religious,1,1,1.0,2000,2008,1
+phil williamson,City Agency,1,1,1.0,2012,2020,1
+phillip dochow,Affordable Housing Developer,1,1,1.0,1998,2006,1
+phoenix alfaro,City Agency,1,1,1.0,2021,2029,1
+pj eugenio,Anti-Displacement,5,5,1.0,2020,2029,1
+prince bush,Social Services,4,4,1.0,2001,2009,1
+r. j. ferrari,Construction,2,2,1.0,2015,2023,1
+r.j. ferrari,Construction,1,1,1.0,2010,2018,1
+rafael picaso,Labor,1,1,1.0,2015,2023,1
+raime dher,Social Services,2,2,1.0,2011,2019,1
+ralph kerstetter,Religious,3,3,1.0,2012,2020,1
+ramie dare,Social Services,1,1,1.0,2020,2028,1
+ramon bonifacio,Anti-Displacement,4,4,1.0,2021,2029,1
+randy shaw,Social Services,1,1,1.0,1998,2006,1
+raquel redondiez,Race/Immigration/LGBTQ Groups,3,3,1.0,2019,2029,1
+ratna amin,SPUR,2,2,1.0,2012,2020,1
+raymond castillo,Anti-Displacement,3,2,0.667,2014,2029,2
+raymond kwong,Race/Immigration/LGBTQ Groups,4,4,1.0,2019,2027,1
+reed maltzman,Religious,4,4,1.0,2021,2029,1
+reina tello,Anti-Displacement,2,2,1.0,2021,2029,1
+rhonda simmons,City Agency,1,1,1.0,2010,2018,1
+richard beal,Religious,1,1,1.0,1999,2007,1
+richard leong,Labor,6,6,1.0,1997,2005,1
+richard levino,Religious,1,1,1.0,1999,2007,1
+richard marquez,Anti-Displacement,13,13,1.0,1996,2009,1
+richard mead,Labor,1,1,1.0,1996,2004,1
+richard nichols,Anti-Displacement,1,1,1.0,1999,2007,1
+richard parrino,Religious,1,1,1.0,1998,2006,1
+richard reutlinger,Historic Preservation,1,1,1.0,1996,2004,1
+richie hart,Construction,2,2,1.0,1998,2008,1
+ricky tijani,City Agency,2,2,1.0,2015,2023,1
+rj ferrari,Construction,1,1,1.0,2019,2027,1
+rob eshelman,Tenant Association,1,1,1.0,1996,2004,1
+rob krantz,Construction,2,2,1.0,2010,2018,1
+robert heacock,Neighborhood Association,1,1,1.0,1999,2007,1
+robert mellett,Construction,1,1,1.0,1998,2006,1
+robert zurcher,Construction,2,2,1.0,1999,2007,1
+roberto hernandez,Anti-Displacement,1,1,1.0,2011,2019,1
+robin haydin,City Agency,2,2,1.0,2010,2018,1
+rochelle holmes,Neighborhood Association,17,17,1.0,2021,2029,1
+roger marenco,Anti-Displacement,2,2,1.0,1998,2006,1
+roger ritter,Neighborhood Association,1,1,1.0,2009,2017,1
+ron miguel,Pro-Housing Advocacy,8,8,1.0,1997,2009,1
+ron morgan,Neighborhood Association,3,3,1.0,1999,2008,1
+ronnie wilson,Neighborhood Association,6,6,1.0,2021,2029,1
+rose wilson,Slow Growth,1,1,1.0,2014,2022,1
+rudy gonzales,Construction,5,4,0.8,2020,2030,2
+russell pritchard,Commercial Association,1,1,1.0,2009,2017,1
+ryan casey,City Agency,1,1,1.0,2019,2027,1
+ryan mcgilley,Construction,1,1,1.0,2016,2024,1
+ryan thompson,City Agency,1,1,1.0,2010,2018,1
+samantha myer,Affordable Housing Developer,3,3,1.0,2014,2022,1
+samuel espino,Construction,1,1,1.0,2015,2023,1
+sara miles,Religious,1,1,1.0,2012,2020,1
+sara ogilvie,Tenant Association,1,1,1.0,2016,2024,1
+sara white,Affordable Housing Developer,1,1,1.0,2013,2021,1
+sarah dennis-phillips,City Agency,1,1,1.0,2014,2022,1
+sarah goldsmith,Neighborhood Association,3,3,1.0,2021,2029,1
+sarah karlinsky,SPUR,6,6,1.0,2002,2015,1
+sarah sherburn-zimmer,Tenant Association,1,1,1.0,2015,2023,1
+sarkis petoyan,Religious,1,1,1.0,1998,2006,1
+scott durcanin,Neighborhood Association,1,1,1.0,2001,2009,1
+scott moran,City Agency,1,1,1.0,2021,2029,1
+sean keighran,Construction,1,1,1.0,1998,2006,1
+shanti singh,Tenant Association,1,1,1.0,2015,2023,1
+shelley arnold,Neighborhood Association,1,1,1.0,2020,2028,1
+shelly roder,Religious,1,1,1.0,1999,2007,1
+skot kuiper,Construction,1,1,1.0,2013,2021,1
+sonja kos,Affordable Housing Developer,7,7,1.0,2009,2018,1
+stan hayes,Neighborhood Association,16,15,0.938,2011,2029,2
+stefano cassolato,Neighborhood Association,1,1,1.0,2004,2012,1
+stephanie chang,Race/Immigration/LGBTQ Groups,1,1,1.0,2009,2017,1
+stephanie lin,Race/Immigration/LGBTQ Groups,1,1,1.0,2009,2017,1
+stephanie rosenfeld,Construction,1,1,1.0,1999,2007,1
+stephanie williams,Construction,1,1,1.0,2021,2029,1
+stephen wilson,Religious,1,1,1.0,1999,2007,1
+steve collier,Social Services,1,1,1.0,2017,2025,1
+steve currier,Neighborhood Association,1,1,1.0,1999,2007,1
+steve suacci,Religious,1,1,1.0,1998,2006,1
+steven currier,Neighborhood Association,1,1,1.0,2004,2012,1
+steven forney,Race/Immigration/LGBTQ Groups,1,1,1.0,2014,2022,1
+sue mell,Tenant Association,1,1,1.0,1996,2004,1
+susan eslick,Neighborhood Association,1,1,1.0,1997,2005,1
+susan fang,Race/Immigration/LGBTQ Groups,1,1,1.0,2009,2017,1
+susan ma,City Agency,1,1,1.0,2020,2028,1
+susan navarre,City Agency,1,1,1.0,2022,2030,1
+susan parsons,SPUR,1,1,1.0,2013,2021,1
+susana rojas,Race/Immigration/LGBTQ Groups,11,11,1.0,2020,2030,1
+suzanna lo,Religious,1,1,1.0,1998,2006,1
+tad buckner,Tenant Association,3,3,1.0,2021,2029,1
+tate hanna,City Agency,1,1,1.0,2021,2029,1
+taylor emerson,City Agency,1,1,1.0,2019,2027,1
+ted conrad,City Agency,2,2,1.0,2018,2027,1
+tedone-deanna gage,Tenant Association,1,1,1.0,2009,2017,1
+teresa almaguer,Anti-Displacement,3,3,1.0,2020,2029,1
+teresa dulalas,Anti-Displacement,4,4,1.0,2021,2029,1
+terry milne,Neighborhood Association,5,5,1.0,1996,2008,1
+theresa dulalas,Anti-Displacement,2,2,1.0,2021,2029,1
+theresa flandrich,Tenant Association,7,6,0.857,2016,2029,2
+thomas roitman,City Agency,1,1,1.0,2021,2029,1
+thomas rourke,Construction,1,1,1.0,2021,2029,1
+thomas shuen,Race/Immigration/LGBTQ Groups,1,1,1.0,1999,2007,1
+tim doherty,City Agency,1,1,1.0,2013,2021,1
+tim donohoe,Social Services,1,1,1.0,2018,2026,1
+tim dunn,Social Services,3,3,1.0,2009,2017,1
+tim kempf,City Agency,6,6,1.0,2020,2028,1
+tim mclaughlin,Construction,1,1,1.0,2014,2022,1
+tim omi,Commercial Association,1,1,1.0,2022,2030,1
+tim ramirez,City Agency,1,1,1.0,2016,2024,1
+timothy reyff,Construction,2,2,1.0,2015,2023,1
+timothy rose,Construction,3,3,1.0,2014,2022,1
+timothy white,Construction,3,3,1.0,2010,2018,1
+timothy wright,Construction,2,2,1.0,2013,2021,1
+todd mavis,SPUR,1,1,1.0,2014,2022,1
+todd rufo,City Agency,4,4,1.0,2010,2019,1
+tom mccann,Construction,1,1,1.0,1997,2005,1
+tom mcguire,City Agency,1,1,1.0,2012,2020,1
+tom mogensen,Neighborhood Association,2,2,1.0,1998,2008,1
+tom tunny,Construction,2,2,1.0,2014,2022,1
+tom wetzel,Anti-Displacement,1,1,1.0,1998,2006,1
+tommi avicolli mecca,Tenant Association,3,2,0.667,2012,2023,2
+tommy avecola mecca,Tenant Association,1,1,1.0,2012,2020,1
+tony gantner,Neighborhood Association,2,2,1.0,2003,2012,1
+tony gazetta,Construction,3,3,1.0,2011,2019,1
+tony kelly,Neighborhood Association,3,3,1.0,2000,2013,1
+tony lee,Construction,1,1,1.0,2013,2021,1
+tony robles,Anti-Displacement,10,10,1.0,2014,2022,1
+tony rodriguez,Construction,1,1,1.0,2015,2023,1
+tony sonasco,Construction,1,1,1.0,2013,2021,1
+tracy ow,Tenant Association,2,2,1.0,2011,2019,1
+trevor long,Construction,2,2,1.0,2021,2030,1
+ty hudson,Construction,3,3,1.0,2021,2029,1
+vedica puri,Neighborhood Association,1,1,1.0,2010,2018,1
+victoria chao,City Agency,1,1,1.0,2021,2029,1
+victoria hanson,Tenant Association,1,1,1.0,2016,2024,1
+vince courtney,Construction,5,5,1.0,2013,2021,1
+virginia barker,Tenant Association,1,1,1.0,2021,2029,1
+vladimir ramirez,Anti-Displacement,2,2,1.0,1998,2006,1
+wai ching-kwan,Race/Immigration/LGBTQ Groups,1,1,1.0,1996,2004,1
+walter orellana,Construction,1,1,1.0,2021,2029,1
+will jackson,YIMBY,1,1,1.0,2021,2029,1
+william campbell,Historic Preservation,1,1,1.0,1997,2005,1
+win tam,Construction,6,6,1.0,2021,2029,1
+winston parsons,Tenant Association,1,1,1.0,2015,2023,1
+woody labounty,Historic Preservation,14,14,1.0,2021,2029,1
+yolanda porrata,Commercial Association,1,1,1.0,2021,2029,1
+zachary frial,Anti-Displacement,9,9,1.0,2020,2029,1

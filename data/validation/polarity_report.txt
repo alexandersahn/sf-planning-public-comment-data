@@ -20,6 +20,6 @@ confusion matrix (rows=true +,-,=):
  [ 208 1540   55]
  [  91   78  853]]
 
-unsigned comments with text: 13380
-imputed at prob>=0.7: 6545 (48.9%)
+unsigned comments with text: 13375
+imputed at prob>=0.7: 6540 (48.9%)
 unsigned without text (not imputable): 14005

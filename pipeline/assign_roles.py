@@ -25,6 +25,16 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from speakers import is_name_like  # noqa: E402
+from rosters import curated_lookup, PROPAGATABLE_ROLES, YEAR_FLOOR  # noqa: E402
+
+# A speaker's stated affiliation is carried to their other comments only
+# within this many years either side of the hearings where they stated it.
+# Names recur across three decades in this corpus and are not unique, so an
+# open-ended window would merge distinct people who share a name.
+ROSTER_WINDOW_YEARS = 4
+# Minimum share of a speaker's stated labels that must agree before the modal
+# role is treated as that person's affiliation.
+ROSTER_MIN_AGREEMENT = 0.6
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "processed"
@@ -38,38 +48,64 @@ LAW_FIRMS = (r"Reuben and Alter|Ruben and Alter|Sanger and Olson|Reuben and Juni
 
 # (regex, role_long) — applied to organization, role_title, then comment.
 # Ported from the paper's comment- and org-based rules; order matters.
+#
+# Matching is case-insensitive (the minutes are inconsistent: "SF YIMBY",
+# "SF Yimby", "yimby"), so every acronym alternative carries explicit \b
+# guards — without them "MEDA" matches "Alameda" and "SPUR" matches
+# "spurred" once case stops constraining them.
 ORG_RULES = [
     (r"Staff ([Rr]eport|[Pp]resentation)|^Planning (Department )?[Ss]taff\b", "Planning Staff"),
     (r"([Ll]egislative )?([Aa]ide to |[Rr]epresenting |Office of )Sup|^Supervisor", "Supervisor's Office"),
-    (r"^Mayor|MOHCD|City Attorney", "Mayor's Office"),
-    (r"Community Benefit District", "Community Benefit District"),
+    (r"^Mayor|\bMOHCD\b|City Attorney", "Mayor's Office"),
+    # City departments other than Planning. Kept below the Mayor's Office rule
+    # so MOHCD and the City Attorney stay where the paper put them.
+    (r"\b(SFMTA|SFPUC|SFUSD|SFFD|SFPD|OEWD|DPW|DPH|DBI|CAO|MOH|MTA|PUC)\b|"
+     r"Port of San Francisco|\bSF Port\b|Rec(reation)? and Park|"
+     r"Department of (Public Works|Public Health|Building Inspection)|"
+     r"Deputy C\.?A\.?\b", "City Agency"),
+    (r"Community Benefit District|\bYBCBD\b|Yerba Buena CBD", "Community Benefit District"),
     (r"Tenant|Housing Rights Committee", "Tenant Association"),
     (LAW_FIRMS, "Legal"),
     (r"(Residents|Resident's|Neighborhood|Neighbors|Homes|Dwellers|Community|"
      r"Improvement|Park|Hill|Valley|Promotion|Triangle|Residence|Hollow|"
      r"Residential) (Council|Association)", "Neighborhood Association"),
     (r"Bernal|Cow Hollow|North Beach|Twin Peaks|Telegraph Hill|Upper Noe|"
-     r"Neighborhood Association|Potrero Booster", "Neighborhood Association"),
+     r"Neighborhood Association|Potrero Booster|\bTHD\b|All Things Bayview|"
+     r"\bATB\b", "Neighborhood Association"),
     (r"(Merchants?|Merchant's|Commercial|Development|Restaurant) Association|"
-     r"Chamber of Commerce|Union Square Alliance", "Commercial Association"),
+     r"Chamber of Commerce|Union Square Alliance|Hotel Council|\bSF Travel\b|"
+     r"Bay Area Council|Small Business Forward", "Commercial Association"),
     (r"^(Church|Unitarian|St\.)|Christian", "Religious"),
-    (r"TODCO|Mission Housing|MEDA|Bernal Heights Housing Corporation|"
-     r"Chinatown Community Development Center", "Affordable Housing Developer"),
+    (r"TODCO|Mission Housing|\bMEDA\b|Bernal Heights Housing Corporation|"
+     r"Chinatown Community Development Center|\bCCDC\b|\bTNDC\b|\bSFHDC\b|"
+     r"Tenderloin Neighborhood Development", "Affordable Housing Developer"),
+    # Organized labor that is not the building trades; kept above the
+    # construction rule, which would otherwise swallow it on "union".
+    (r"Teamsters|\bSEIU\b|\bILWU\b|UNITE HERE|Labor Council", "Labor"),
     (r"Local [0-9]+|[Uu]nion\b|[Cc]arpenter|[Bb]uilding [Tt]rade|Trades|"
      r"Electrical|Residential Builders", "Construction"),
-    (r"SFHAC|Housing Action Coalition|YIMBY|Grow SF|Grow the Richmond|Density",
-     "YIMBY"),
+    # The paper lumped the YIMBY movement together with the Housing Action
+    # Coalition and GrowSF. They are separate organizations with different
+    # founding dates and different memberships, and by volume this bucket was
+    # mostly HAC, so they are now split.
+    (r"\bYIMBY\b|\bSFBARF\b|\bBARF\b|Renters'? Federation|Grow ?SF|"
+     r"Grow the Richmond", "YIMBY"),
+    (r"Housing Action Coalition|\bSFHAC\b|\bHAC\b", "Pro-Housing Advocacy"),
+    (r"San Francisco Heritage|\bSF Heritage\b|Victorian Alliance",
+     "Historic Preservation"),
     (r"Anti-Displacement|Mission Agenda|PODER|^MAC\b|Mission Anti|Eviction|"
-     r"Market Street for the Masses", "Anti-Displacement"),
+     r"Market Street for the Masses|\bSOMCAN\b|"
+     r"South of Market Community Action", "Anti-Displacement"),
     (r"^(Native|Asian|LGBTQ|Samoan|Chinese|Latino|Both Sides of the Conversation)|"
-     r"Calle 24", "Race/Immigration/LGBTQ Groups"),
+     r"Calle 24|SOMA Pilipinas", "Race/Immigration/LGBTQ Groups"),
     (r"Young Community Developers|Tenderloin Housing Clinic|Vincent de Paul|"
      r"Self-Help for the Elderly|Mercy Housing|Sixth Street Agenda|"
      r"Nihonmachi Little Friends", "Social Services"),
     (r"Coalition for San Francisco Neighborhood|San Francisco Land Use Coalition|"
-     r"Coalition for Adequate Review|SFRG|San Francisco Tomorrow|"
+     r"Coalition for Adequate Review|\bSFRG\b|San Francisco Tomorrow|"
+     r"\bNUSF\b|Neighborhoods United|"
      r"San Francisco Citizens for Considered Development", "Slow Growth"),
-    (r"SPUR", "SPUR"),
+    (r"\bSPUR\b", "SPUR"),
 ]
 
 DR_TEAM_RE = re.compile(
@@ -87,17 +123,21 @@ ROLE_GROUP = {
     "Slow Growth": "Housing Interest Groups",
     "Anti-Displacement": "Housing Interest Groups",
     "Tenant Association": "Housing Interest Groups",
+    "Historic Preservation": "Housing Interest Groups",
     "Chamber of Commerce": "Business Groups",
     "Commercial Association": "Business Groups",
     "Community Benefit District": "Business Groups",
     "Construction": "Business Groups",
+    "Labor": "Business Groups",
     "Race/Immigration/LGBTQ Groups": "Social Interest Groups",
     "Religious": "Social Interest Groups",
     "Social Services": "Social Interest Groups",
     "SPUR": "Pro-Development Interest Groups",
     "YIMBY": "Pro-Development Interest Groups",
+    "Pro-Housing Advocacy": "Pro-Development Interest Groups",
     "Mayor's Office": "Inter-Governmental",
     "Supervisor's Office": "Inter-Governmental",
+    "City Agency": "Inter-Governmental",
     "Commissioner": "Inter-Governmental",
     "Project Team": "Project Team",
     "Legal": "Project Team",
@@ -157,15 +197,108 @@ def classify_org(text, anchored=False):
     """
     if not isinstance(text, str) or not text.strip():
         return None
+    flags = re.IGNORECASE
     for pat, role in ORG_RULES:
-        if (re.match(pat, text) if anchored else re.search(pat, text)):
+        if (re.match(pat, text, flags) if anchored
+                else re.search(pat, text, flags)):
             return role
     return None
+
+
+def build_derived_roster(com, name_l, years, staff_all):
+    """Infer each speaker's standing affiliation from their own testimony.
+
+    Evidence is restricted to comments where the speaker stated an
+    affiliation (`stated_*` sources). Curated, lookup and neighborhood-roster
+    labels are already person-level, so feeding them back in would only
+    re-derive them; case roles (Project Team, DR Team, Legal) describe a
+    relationship to one item and are excluded by PROPAGATABLE_ROLES.
+
+    Guards, in order of how much they matter:
+      * two or more name tokens — 4,009 speakers are recorded by a single
+        token ("Kiefer", "Gloria") and those collide constantly;
+      * the modal role must hold at least ROSTER_MIN_AGREEMENT of the
+        speaker's stated labels, so people who have represented two
+        different kinds of organization are left to the comment-level rules;
+      * a tenure window of ROSTER_WINDOW_YEARS either side of the years they
+        actually stated it;
+      * never a name on the Planning staff roster.
+
+    Returns (lookup dict, rows for the audit file).
+    """
+    ev = pd.DataFrame({
+        "nm": name_l,
+        "year": years,
+        "role": com["role_long"],
+        "src": com["role_source"],
+    })
+    ev = ev[ev["src"].isin(["stated_org", "stated_role_title", "stated_comment"])
+            & ev["role"].isin(PROPAGATABLE_ROLES)
+            & ev["nm"].str.split().str.len().ge(2)
+            & ~ev["nm"].isin(staff_all)
+            & ev["year"].notna()]
+
+    derived, rows = {}, []
+    for nm, g in ev.groupby("nm"):
+        counts = g["role"].value_counts()
+        role, n = counts.index[0], int(counts.iloc[0])
+        agreement = n / len(g)
+        lo = int(g["year"].min()) - ROSTER_WINDOW_YEARS
+        hi = int(g["year"].max()) + ROSTER_WINDOW_YEARS
+        keep = agreement >= ROSTER_MIN_AGREEMENT
+        rows.append({"name": nm, "role_long": role, "n_stated": len(g),
+                     "n_modal": n, "agreement": round(agreement, 3),
+                     "year_lo": lo, "year_hi": hi,
+                     "distinct_roles": int(counts.size), "used": int(keep)})
+        if keep:
+            derived[nm] = {"role": role, "lo": lo, "hi": hi}
+    return derived, rows
+
+
+ROLE_ONLY = re.compile(
+    r"^\s*(co-)?(project |property |building |discretionary review )?"
+    r"(sponsor|architect|owner|developer|team|representative|requestor|"
+    r"applicant|consultant|engineer|planner|contractor|speaker|staff)s?"
+    r"('s)?\s*(representative)?\s*$", re.I)
+ROLE_SUFFIX = re.compile(
+    r"\s*[-–—,]+\s*(co-)?(project |property |building |discretionary review )?"
+    r"(sponsor|architect|owner|developer|requestor|applicant)s?\s*$", re.I)
+
+
+def demote_role_labels(com):
+    """Treat a bare role label as anonymous, because that is what it is.
+
+    157 speakers are recorded under a role rather than a name — "Project
+    Sponsor", "Requestor", "Project Architect" — and is_anonymous was 0 on
+    every one, so they read as named individuals and accumulated across
+    hearings as if they were one person. They are as anonymous as "Speaker".
+    Where a name is attached ("Jerry -- Project Sponsor") the name is kept
+    and the role moves to role_title.
+
+    Returns the number of records demoted.
+    """
+    raw = com["name_clean"].fillna("")
+    stripped = raw.str.replace(ROLE_SUFFIX, "", regex=True).str.strip()
+    is_role = stripped.str.match(ROLE_ONLY) | raw.str.match(ROLE_ONLY)
+
+    # "Jerry -- Project Sponsor": keep Jerry, move the role to role_title
+    recovered = stripped.ne(raw) & ~is_role & stripped.ne("")
+    suffix = [r[len(t):].strip(" -–—,") for r, t in zip(raw[recovered],
+                                                        stripped[recovered])]
+    fill = recovered & com["role_title"].isna()
+    com.loc[fill, "role_title"] = pd.Series(suffix, index=raw[recovered].index)[fill[recovered]]
+    com.loc[recovered, "name_clean"] = stripped[recovered]
+
+    com.loc[is_role & com["role_title"].isna(), "role_title"] = raw[is_role].str.strip()
+    com.loc[is_role, "is_anonymous"] = 1
+    com.loc[is_role, "name_clean"] = pd.NA
+    return int(is_role.sum()), int(recovered.sum())
 
 
 def main():
     com = pd.read_csv(OUT / "comments.csv", low_memory=False,
                       keep_default_na=False, na_values=[""])
+    n_role, n_recovered = demote_role_labels(com)
     meetings = pd.read_csv(OUT / "meetings.csv")
 
     # ------------------------------------------------------------ rosters
@@ -241,44 +374,87 @@ def main():
         int(nm != "" and nm in comm_by_meeting.get(md, set()))
         for nm, md in zip(name_l, com["meeting_date"])]
 
+    curated = curated_lookup()
+    year_floor = {k.lower(): v for k, v in YEAR_FLOOR.items()}
+    years = mdates.dt.year
+
     def assign(row_idx):
+        """Return (role_long, role_source) for one comment."""
         rt, org, cm = (fields[0].iat[row_idx], fields[1].iat[row_idx],
                        fields[2].iat[row_idx])
         nm = name_l.iat[row_idx]
-        # 1. project-specific roles
+        # 1. case-specific roles: someone's relationship to *this* item
         for f in (rt, cm):
             if DR_TEAM_RE.search(f):
-                return "DR Team"
+                return "DR Team", "case_role"
         for f in (rt, cm):
             if re.search(LAW_FIRMS, f):
-                return "Legal"
+                return "Legal", "case_role"
             if PROJECT_TEAM_RE.search(f):
-                return "Project Team"
-        # 2. staff / commissioner
+                return "Project Team", "case_role"
+        # 2. staff / commissioner, from the meeting's own attendance roster
         if com["is_staff"].iat[row_idx]:
-            return "Planning Staff"
+            return "Planning Staff", "attendance"
         if com["is_commissioner"].iat[row_idx]:
-            return "Commissioner"
-        # 3. org-based classification (org column first, then title, then
-        # comment text — the latter anchored at the start)
-        for f, anch in ((org, False), (rt, False), (cm, True)):
+            return "Commissioner", "attendance"
+        # 3. curated person-level roster (hand-collected membership)
+        if nm in curated:
+            role, canonical = curated[nm]
+            floor = year_floor.get(canonical.lower())
+            yr = years.iat[row_idx]
+            if floor is None or (pd.notna(yr) and yr >= floor):
+                return role, "roster_curated"
+        # 4. affiliation stated in this comment (org column first, then
+        # title, then comment text — the latter anchored at the start)
+        for f, anch, src in ((org, False, "stated_org"),
+                             (rt, False, "stated_role_title"),
+                             (cm, True, "stated_comment")):
             role = classify_org(f, anchored=anch)
             if role:
-                return role
-        # 4. registered neighborhood-group roster
+                return role, src
+        # 5. registered neighborhood-group roster
         if nm in nhood_map:
-            return classify_org(str(nhood_map[nm])) or "Neighborhood Association"
-        # 5. author's name-level lookup
+            return (classify_org(str(nhood_map[nm])) or "Neighborhood Association",
+                    "nhood_roster")
+        # 6. author's name-level lookup
         if nm in lookup_role_map:
-            return lookup_role_map[nm]
-        return None
+            return lookup_role_map[nm], "lookup_role"
+        return None, None
 
-    com["role_long"] = [assign(i) for i in range(len(com))]
+    assigned = [assign(i) for i in range(len(com))]
+    com["role_long"] = [a[0] for a in assigned]
+    com["role_source"] = [a[1] for a in assigned]
+
+    # ------------------------------------------------- derived person roster
+    # Most speakers name their organization in only some of their
+    # appearances. Build a roster from the comments where they did, and carry
+    # it to the ones where they did not.
+    derived, roster_rows = build_derived_roster(com, name_l, years, staff_all)
+    fill = com["role_long"].isna()
+    filled_role, filled_src = [], []
+    for i in range(len(com)):
+        if not fill.iat[i]:
+            filled_role.append(com["role_long"].iat[i])
+            filled_src.append(com["role_source"].iat[i])
+            continue
+        ent = derived.get(name_l.iat[i])
+        yr = years.iat[i]
+        if ent and pd.notna(yr) and ent["lo"] <= yr <= ent["hi"]:
+            filled_role.append(ent["role"])
+            filled_src.append("roster_derived")
+        else:
+            filled_role.append(pd.NA)
+            filled_src.append(com["role_source"].iat[i])
+    com["role_long"] = filled_role
+    com["role_source"] = filled_src
+
+    pd.DataFrame(roster_rows).to_csv(VAL / "person_roster.csv", index=False)
 
     # manual overrides (paper's corrections) take precedence
     manual = {k.lower(): v for k, v in MANUAL_ROLES.items()}
     override = name_l.map(manual)
     com.loc[override.notna(), "role_long"] = override[override.notna()]
+    com.loc[override.notna(), "role_source"] = "manual"
 
     com["role_group"] = com["role_long"].map(
         lambda r: ROLE_GROUP.get(r, r) if pd.notna(r) else pd.NA)
@@ -310,6 +486,24 @@ def main():
         f.write("\nrole_group distribution:\n")
         for k, v in com["role_group"].value_counts().items():
             f.write(f"  {k}: {v}\n")
+        f.write("\nrole_source distribution:\n")
+        for k, v in com["role_source"].value_counts().items():
+            f.write(f"  {k}: {v}\n")
+
+        roster = pd.read_csv(VAL / "person_roster.csv")
+        f.write(f"\nderived person roster: {len(roster)} speakers with a "
+                f"stated affiliation, {int(roster['used'].sum())} used "
+                f"(rest failed the {ROSTER_MIN_AGREEMENT:.0%} agreement test)\n")
+        f.write(f"comments labeled by the derived roster: "
+                f"{int((com['role_source'] == 'roster_derived').sum())}\n")
+        f.write(f"comments labeled by the curated roster: "
+                f"{int((com['role_source'] == 'roster_curated').sum())}\n")
+
+        pubmask = (com["is_staff"] != 1) & (com["is_commissioner"] != 1)
+        named = pubmask & com["name_clean"].notna() & (com["is_anonymous"] != 1)
+        f.write(f"\nnamed public comments: {int(named.sum())}\n")
+        f.write(f"  with a role: {int((named & com['role_long'].notna()).sum())} "
+                f"({(com.loc[named, 'role_long'].notna().mean()):.1%})\n")
         f.write(f"\nrole-implied signs added: {int(m.sum())}\n")
     print(open(VAL / "roles_report.txt").read())
 

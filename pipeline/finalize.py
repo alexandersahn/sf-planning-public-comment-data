@@ -47,9 +47,34 @@ COMMENT_COLS = [
     "speaker_order", "name_clean", "name_raw", "title", "role_title",
     "organization",
     "is_anonymous", "anon_gender", "name_single", "is_staff", "is_commissioner",
-    "role_long", "role_group", "sign", "sign_imputed",
+    "role_long", "role_source", "role_group", "sign", "sign_imputed",
     "sign_prob", "sign_source", "comment", "method",
 ]
+
+
+def flag_fanout_duplicates(com, items):
+    """Mark the redundant copies a speaker's testimony fans out into.
+
+    One agenda item that spans several case suffixes (2017-008051 was heard
+    as SHD/ENV/DNX/CUA/OFA across sub-items 1a-2e) becomes several item rows,
+    and the whole speaker list is attached to each. 456 item slots are also
+    parsed twice under two section_groups. Between them, one person speaking
+    once on 30 Van Ness on 2020-05-21 is recorded 14 times, and about a fifth
+    of all comment rows are redundant.
+
+    The rows are flagged rather than deleted, so joins on item_id still work
+    and anyone counting comments can filter on one column. `is_duplicate = 0`
+    is the row to keep.
+    """
+    key = items[["item_id", "id_parent"]].drop_duplicates("item_id")
+    c = com.merge(key, on="item_id", how="left")
+    dup_key = ["meeting_date", "name_raw", "comment", "id_parent"]
+    # only rows that actually resolve to a project can fan out
+    resolvable = c["id_parent"].notna() & c["name_raw"].notna()
+    com["is_duplicate"] = 0
+    dup = resolvable & c.duplicated(dup_key, keep="first")
+    com.loc[dup.values, "is_duplicate"] = 1
+    return com
 
 
 def main():
@@ -68,6 +93,7 @@ def main():
 
     com = comments[[c for c in COMMENT_COLS if c in comments.columns]].copy()
     com = com[com["method"] != "same_as_unresolved"]
+    com = flag_fanout_duplicates(com, items)
     com.to_csv(PUB / "comments.csv", index=False)
 
     # ancillary crosswalk of likely-identical names for downstream linking
@@ -87,6 +113,15 @@ def main():
     tenure_path = OUT / "staff_tenure.csv"
     if tenure_path.exists():
         pd.read_csv(tenure_path).to_csv(PUB / "staff_tenure.csv", index=False)
+
+    # person-level affiliation roster: the speakers whose stated affiliation
+    # was carried to their other comments, so `role_source == roster_derived`
+    # can be audited. Only the entries that were actually applied.
+    roster_path = VAL / "person_roster.csv"
+    if roster_path.exists():
+        roster = pd.read_csv(roster_path)
+        (roster[roster["used"] == 1].drop(columns=["used"])
+         .to_csv(PUB / "person_roster.csv", index=False))
 
     # meeting-level: add comment counts
     cc = com.groupby("meeting_date").size().rename("n_comments")

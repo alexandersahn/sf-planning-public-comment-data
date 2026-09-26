@@ -80,9 +80,53 @@ footprints.
 | is_anonymous | 1 if the minutes identify the speaker only generically ("Speaker", "(M) Speaker", "name unclear") |
 | anon_gender | M/F when the stenographer marked an anonymous speaker's gender |
 | is_staff | 1 if the speaker appears in the minutes' own "STAFF IN ATTENDANCE" roster (same meeting or any meeting, 1998–2026) or the 2022 Planning staff directory |
-| is_commissioner | 1 if the speaker is listed among that meeting's "COMMISSIONERS PRESENT" |
-| role_long | speaker role/interest-group classification (taxonomy from Sahn's AJPS pipeline): Planning Staff, Commissioner, Supervisor's Office, Mayor's Office, DR Team, Project Team, Legal, Neighborhood Association, Commercial Association, Tenant Association, Construction, YIMBY, SPUR, Slow Growth, Anti-Displacement, Affordable Housing Developer, Religious, Social Services, Race/Immigration/LGBTQ Groups, Community Benefit District, Chamber of Commerce. Sources, in precedence order: project-role phrases in the comment/role_title; attendance rosters; organization classification rules; the registered neighborhood-group roster; the author's name-level lookups and manual corrections |
+| is_commissioner | 1 if the speaker is listed among that meeting's "COMMISSIONERS PRESENT". **Always 0 in practice**: commissioners speak from the dais and are recorded in the MOTION and ACTION blocks, not in the SPEAKERS lists this table is built from. The column is kept so the filter `is_staff != 1 & is_commissioner != 1` stays correct if that ever changes |
+| role_long | speaker role/interest-group classification (taxonomy from Sahn's AJPS pipeline, extended): Planning Staff, Commissioner, Supervisor's Office, Mayor's Office, City Agency, DR Team, Project Team, Legal, Neighborhood Association, Commercial Association, Tenant Association, Construction, Labor, YIMBY, Pro-Housing Advocacy, SPUR, Slow Growth, Anti-Displacement, Historic Preservation, Affordable Housing Developer, Religious, Social Services, Race/Immigration/LGBTQ Groups, Community Benefit District, Chamber of Commerce |
+| is_duplicate | 1 if this row is a redundant copy of another comment. One agenda item spanning several case suffixes (2017-008051 was heard as SHD/ENV/DNX/CUA/OFA across sub-items 1a–2e) becomes several item rows, and the whole speaker list is attached to each; 456 item slots are also parsed twice under two `section_group` values. One person speaking once on 30 Van Ness on 2020-05-21 is recorded 14 times. 13,996 of 76,731 rows (18%) are redundant. **Filter `is_duplicate == 0` for any count of comments, speakers or positions.** The rows are flagged rather than deleted so that joins on `item_id` still return every item the testimony was recorded against |
+| role_source | how `role_long` was determined — see the note below. Values: `case_role`, `attendance`, `roster_curated`, `stated_org`, `stated_role_title`, `stated_comment`, `nhood_roster`, `lookup_role`, `roster_derived`, `manual` |
 | role_group | coarse grouping of role_long: Planning Staff, Project Team, DR Team, Neighborhood Association, Business Groups, Housing Interest Groups, Pro-Development Interest Groups, Social Interest Groups, Inter-Governmental |
+
+### How speakers are classified (`role_long`, `role_source`)
+
+Rules are applied in this order, and `role_source` records which one fired:
+
+| order | `role_source` | rule |
+|---|---|---|
+| 1 | `case_role` | phrases in the comment or role_title marking the speaker's relation to *this* item — project sponsor, architect, DR requestor, counsel |
+| 2 | `attendance` | the meeting's own STAFF IN ATTENDANCE / commissioners-present roster |
+| 3 | `roster_curated` | hand-collected organization membership (`pipeline/rosters.py`), from org team and board pages, current and archived |
+| 4 | `stated_org`, `stated_role_title`, `stated_comment` | the speaker named an organization in this comment. Comment text is matched only at the start of the summary, where the stenographer records affiliation |
+| 5 | `nhood_roster` | the city's registered neighborhood-group roster |
+| 6 | `lookup_role` | the AJPS pipeline's name-level lookup |
+| 7 | `roster_derived` | the speaker stated an affiliation in *other* comments, and this one falls inside that tenure window (below) |
+| — | `manual` | the paper's name-level corrections, applied last and overriding the rest |
+
+**Person-level propagation.** Most speakers name their organization in only
+some appearances, which leaves the rest of their testimony unclassified. Step
+7 carries a speaker's stated affiliation to their other comments, subject to
+four guards: the name must have at least two tokens (single-token names such
+as "Gloria" collide constantly); the modal role must account for at least 60%
+of that speaker's stated labels; the comment must fall within four years of a
+hearing where they did state it; and the name must not be on the Planning
+staff roster. Speakers who fail these tests keep only their comment-level
+labels. The applied roster ships as `person_roster.csv` (one row per speaker:
+`name`, `role_long`, `n_stated`, `n_modal`, `agreement`, `year_lo`,
+`year_hi`, `distinct_roles`), so every propagated label can be traced back to
+the testimony it was inferred from. The full version, including entries that
+were built but failed a guard, is written to
+`data/validation/person_roster.csv` during the build.
+
+Case roles (Project Team, DR Team, Legal) are never propagated — they
+describe a relationship to one specific case, not a standing affiliation.
+
+**Breaking change from earlier releases.** `YIMBY` previously covered the
+YIMBY movement, the Housing Action Coalition and GrowSF together; by volume
+it was mostly the Housing Action Coalition. `YIMBY` now means the movement
+proper (SFBARF, SF YIMBY, YIMBY Action) and `Pro-Housing Advocacy` the rest.
+Both sit in the `Pro-Development Interest Groups` role_group, so series built
+on `role_group` are unaffected. A rule that classified any comment beginning
+with the word "Density" as YIMBY was also removed; it was matching ordinary
+commenters discussing density rather than any organization.
 | sign | speaker polarity as recorded by the commission secretary: `+` support, `-` opposition, `=` neutral/unstated. Recorded systematically from ~2005 onward; missing in most earlier minutes |
 | sign_imputed | model-imputed polarity for comments with no recorded sign (TF-IDF + logistic regression trained on the 45k stenographer-signed comments; held-out accuracy 0.92 at the 0.70-probability acceptance threshold; see data/validation/polarity_report.txt). Never overrides `sign` |
 | sign_prob | model confidence for `sign_imputed` (only values ≥ 0.70 accepted) |

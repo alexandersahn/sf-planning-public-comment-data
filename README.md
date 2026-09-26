@@ -59,6 +59,7 @@ several bugs in the original data were corrected.
 | `items.csv.gz` | agenda item | section, case number & entitlement type, full item text, staff recommendation, commission action, votes, coded outcomes (approve / approve w. conditions / disapprove / continuance / withdraw / no action), project attributes from DataSF (units, uses, address), parcel coordinates |
 | `comments.csv` | public comment | speaker name (raw + cleaned), title, role/organization, interest-group classification, polarity (stenographer-recorded, role-implied, or model-imputed — flagged by source), comment summary, extraction method |
 | `staff_tenure.csv` | staff member | Planning Department staff panel from Wayback Machine directory snapshots, 2011–2026 |
+| `person_roster.csv` | speaker | speakers whose stated organizational affiliation was carried to their other testimony, with the evidence and tenure window behind each entry |
 | `name_crosswalk.csv` | name pair | applied and candidate name merges, for record linkage |
 | `codebook.md` | — | full variable documentation |
 
