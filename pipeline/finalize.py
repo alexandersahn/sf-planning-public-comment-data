@@ -10,8 +10,12 @@ Writes to public/:
 
 import re
 from pathlib import Path
+import sys
 
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from resolve_commenters import resolve  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "processed"
@@ -166,6 +170,7 @@ def main():
     com = drop_fanout_duplicates(com, items)
     com = unify_channels(com, items)
     com = scrub_contacts(com, ["text", "comment", "subject"])
+    com = resolve(com)
     com.to_csv(PUB / "comments.csv", index=False)
 
     # ancillary crosswalk of likely-identical names for downstream linking
@@ -229,7 +234,8 @@ def main():
         f"- spoken comments with a stenographer polarity sign: {signed}"
         f" ({signed / max(len(sp), 1):.0%})",
         f"- comments with model-imputed sign: {imputed}",
-        f"- unique speakers (cleaned names): {uniq.loc[uniq['name_clean'] != '', 'name_clean'].nunique()}",
+        f"- unique commenters: {uniq['commenter_id'].nunique()}"
+        f" (name spellings: {uniq.loc[uniq['name_clean'].notna(), 'name_clean'].nunique()})",
         f"- items matched to DataSF project records: {items['prj_record_id'].notna().sum()}",
         f"- items with coordinates: {items['latitude'].notna().sum()}",
 

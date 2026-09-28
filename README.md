@@ -1,60 +1,93 @@
-# San Francisco Planning Commission Public Comment Data, 1998–2026
+# San Francisco Planning Commission Public Comment
 
-This dataset parses **every San Francisco Planning
-Commission meeting's minutes from January 1998 to July 2026** into
-structured records: agenda items with staff recommendations and commission
-actions, and each public comment with the speaker's name, recorded polarity
-(support / oppose / neutral), the stenographer's summary of what they said,
-and the speaker's role or organizational affiliation. Items are joined to
-San Francisco Planning Department project records (unit counts, uses,
-locations).
+Who shows up to comment on land use in San Francisco, what they say, and what
+the Commission decides.
 
-**Current coverage:** 1,252 meetings · 25,560 agenda items ·
-62,735 public comments · 24,852 unique speakers ·
-January 1998 – March 2026. Updated periodically as new minutes are posted.
+Every public comment made to the San Francisco Planning Commission in
+structured form — spoken testimony from the meeting minutes since 1998, and
+written comment from the correspondence packets since 2017 — linked to the
+project it concerns and to the Commission's eventual decision on that project.
 
-The comment count excludes 13,996 rows flagged `is_duplicate`: one agenda
-item spanning several case numbers becomes several item rows, and the whole
-speaker list is attached to each, so the same testimony appears more than once.
-Filter `is_duplicate == 0` before counting anything.
+**1,252 meetings · 25,560 agenda items · 73,002 comments · 28,421 commenters ·
+January 1998 – March 2026**
+
+Browse it at [alexandersahn.com/sf_commenter_data](https://alexandersahn.com/sf_commenter_data/).
+
+## What you can do with it
+
+Each comment carries a position — support, oppose, neutral — and the project
+it concerns; each project carries the Commission's action and vote. So you can
+ask who turns out for which kinds of project, whether opposition predicts
+denial, how the composition of commenters shifted as the housing debate did,
+and whether the people who write in are the same ones who show up in person.
 
 ## The data (`public/`)
 
 | file | unit | contents |
 |---|---|---|
-| `meetings.csv` | meeting | date, type, start/adjournment times, staff & commissioner attendance rosters, source URL |
-| `items.csv.gz` | agenda item | section, case number & entitlement type, full item text, staff recommendation, commission action, votes, coded outcomes (approve / approve w. conditions / disapprove / continuance / withdraw / no action), project attributes from DataSF (units, uses, address), parcel coordinates |
-| `comments.csv` | public comment | speaker name (raw + cleaned), title, role/organization, interest-group classification, polarity (stenographer-recorded, role-implied, or model-imputed — flagged by source), comment summary, extraction method |
-| `staff_tenure.csv` | staff member | Planning Department staff panel from Wayback Machine directory snapshots, 2011–2026 |
-| `person_roster.csv` | speaker | speakers whose stated organizational affiliation was carried to their other testimony, with the evidence and tenure window behind each entry |
-| `name_crosswalk.csv` | name pair | applied and candidate name merges, for record linkage |
-| `codebook.md` | — | full variable documentation |
+| `comments.csv` | comment | who commented, what they said, their position, the project and hearing, and — for spoken comment — their role or organizational affiliation |
+| `items.csv.gz` | agenda item | case number, full item text, staff recommendation, Commission action and vote, coded outcome, project attributes from DataSF, coordinates |
+| `meetings.csv` | meeting | date, type, times, staff and commissioner attendance |
+| `staff_tenure.csv` | staff member | Planning Department staff and when they served, 2011–2026 |
+| `person_roster.csv` | commenter | organizational affiliations carried across a commenter's testimony, with the evidence for each |
+| `name_crosswalk.csv` | name pair | name variants treated as the same person |
+| `codebook.md` | — | every variable, and how each was derived |
 
-`items.csv.gz` reads directly with `pandas.read_csv("items.csv.gz")` or
-`readr::read_csv("items.csv.gz")`.
+`comments.csv` covers both channels; `channel` distinguishes them. Start with
+`position`, `id_parent` and `channel`, and read the codebook before using the
+polarity or affiliation columns, which come from sources of differing
+reliability.
 
-## Sources
+## Where it comes from
 
-- **Minutes:** [SF Planning CPC hearing archives](https://sfplanning.org/cpc-hearing-archives)
-  (2019–present PDFs; 2015–2018 sfgov.org archive pages; 1998–2014 via the
-  mirrored legacy site on S3).
-- **Projects:** DataSF, [Planning Department Records – Projects](https://data.sfgov.org/Economy-and-Community/Planning-Department-Records-Projects/qvu5-m3a2).
-- **Geocoding:** DataSF, [Addresses with Units – EAS](https://data.sfgov.org/Geographic-Locations-and-Boundaries/Addresses-with-Units-Enterprise-Addressing-System/ramy-di5m)
-  (parcel centroids and address points; no commercial geocoder used).
-- **Staff panel:** Wayback Machine snapshots of the Planning Department
-  staff directory.
+- **Spoken comment:** [SF Planning hearing archives](https://sfplanning.org/cpc-hearing-archives)
+  — 2019–present PDFs, 2015–2018 sfgov.org archive pages, 1998–2014 via the
+  mirrored legacy site.
+- **Written comment:** the Commission Packet posted before each hearing, which
+  reproduces the correspondence received. Parsed and coded for Sahn and Simko
+  (below); the coded corpus ships as `data/reference/emails_coded.csv.gz`.
+- **Projects and geocoding:** DataSF
+  [Planning Department Records](https://data.sfgov.org/Economy-and-Community/Planning-Department-Records-Projects/qvu5-m3a2)
+  and [Addresses with Units](https://data.sfgov.org/Geographic-Locations-and-Boundaries/Addresses-with-Units-Enterprise-Addressing-System/ramy-di5m).
 
-Polarity signs are the commission secretary's own +/−/= notations where
-recorded (systematic from ~2005). For unsigned comments with text, a
-classifier trained on the 45k stenographer-signed comments imputes polarity
-(held-out accuracy 0.93 at the acceptance threshold); imputed values are in
-separate columns and flagged by `sign_source`. See `public/codebook.md`.
+`./update.sh` rebuilds everything from source.
+
+## What to know before using it
+
+**Positions come from three places.** The commission secretary's own +/−/=
+marks, systematic from about 2005; a classifier trained on those marks, for
+unsigned comments that have text; and LLM coding for written comment.
+`position_source` says which, and they are not equally reliable.
+
+**Written comment is matched to projects, not to hearings.** Emails arrive
+before a hearing and items get continued, so a message is attached to its
+project's first hearing on or after the packet date. Only 37% were heard on
+the packet date itself.
+
+**Names are not identities.** `commenter_id` merges spellings of the same
+person conservatively — a name match is acted on only with corroborating
+evidence, because the corpus contains genuine namesakes.
+
+**No contact details are published.** Senders of written comment appear as a
+salted digest, and addresses and phone numbers are redacted from comment text.
 
 ## Citing
 
-Please cite the AJPS article (above) and this dataset; see `CITATION.cff`.
+Please cite the article and the dataset; see `CITATION.cff`.
+
+> Sahn, Alexander. 2025. "Public Comment and Public Policy."
+> *American Journal of Political Science* 69(2): 685–700.
+> https://doi.org/10.1111/ajps.12900
+
+This is not the replication archive for that article, which is at the
+[AJPS Dataverse](https://doi.org/10.7910/DVN/WZOC7H). It is a successor build:
+extended to the present, re-parsed, and corrected.
+
+Written comment is from Sahn, Alexander, and Tyler Simko, "Issue
+Accountability Among Public Meeting Commenters" (conditionally accepted,
+*American Journal of Political Science*).
 
 ## License
 
-Code: MIT. Data: CC BY 4.0. The underlying minutes and administrative
-records are public documents of the City and County of San Francisco.
+Code: MIT. Data: CC BY 4.0. The underlying records are public documents of the
+City and County of San Francisco.

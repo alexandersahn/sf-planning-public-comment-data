@@ -133,7 +133,8 @@ n_gov = 0
 SIGN = {"+": "support", "-": "oppose", "=": "neutral"}
 a = pd.DataFrame({
     "unnamed": False, "anon_key": None,
-    "channel": "spoken", "name": sp.name_clean, "n": sp["n"],
+    "channel": "spoken", "name": sp.name_clean,
+    "n": sp.commenter_id.fillna(sp["n"]),
     "id_parent": sp.id_parent, "date": sp.meeting_date, "year": sp.year,
     "role_long": sp.role_long, "position": sp.sign.fillna(sp.sign_imputed).map(SIGN),
     "text": sp.comment, "subject": None, "domain": None,
@@ -145,7 +146,8 @@ a = pd.DataFrame({
 em["campaign_label"] = em["campaign"]
 
 b = pd.DataFrame({
-    "channel": "email", "name": em.name_clean, "n": em["n"],
+    "channel": "email", "name": em.name_clean,
+    "n": em.commenter_id.fillna(em["n"]),
     "id_parent": em.id_parent, "date": em.meeting_date, "year": em.year,
     "role_long": None, "position": em.position, "text": em.body,
     "subject": em.subject, "domain": em.domain,
@@ -222,105 +224,11 @@ def ptitle(i):
     return clean_title(r.text) or str(i)
 
 # ------------------------------------------------- identity resolution
-from rapidfuzz import fuzz  # noqa: E402
-
-# Profile of every name in each channel, for scoring candidate matches.
-def profile(df):
-    d = df[df["n"].str.split().str.len() >= 2]
-    return d.groupby("n").agg(proj=("id_parent", lambda s: set(s.dropna())),
-                              yrs=("year", lambda s: set(s.dropna())))
-
-spset, emset = profile(sp), profile(em)
-allnames = set(spset.index) | set(emset.index)
-last = collections.Counter(x.split()[-1] for x in allnames)
-
-# Exact equality is too strict: the minutes say "David Brockman", the packets
-# say "David Broockman". Block on first initial + first three letters of the
-# surname (which survives that kind of typo), then score inside the block.
-blocks = collections.defaultdict(list)
-for nm in allnames:
-    t = nm.split()
-    blocks[("sur", t[0][0], t[-1][:3])].append(nm)
-
-# Surname-prefix blocking misses names the stenographer heard wrong rather
-# than mistyped. Add a pass keyed on an uncommon first name, where a merge is
-# plausible enough to be worth scoring - but only uncommon ones, or every
-# "John" in the corpus becomes a candidate pair.
-_first = collections.Counter(nm.split()[0] for nm in allnames)
-for nm in allnames:
-    f = nm.split()[0]
-    if _first[f] <= 12:
-        blocks[("first", f)].append(nm)
-
-def corroborate(x, y):
-    """Shared evidence for two name spellings being one person."""
-    px = spset.proj.get(x, set()) | emset.proj.get(x, set())
-    py = spset.proj.get(y, set()) | emset.proj.get(y, set())
-    yx = spset.yrs.get(x, set()) | emset.yrs.get(x, set())
-    yy = spset.yrs.get(y, set()) | emset.yrs.get(y, set())
-    shared = px & py
-    gap = min((abs(a - b) for a in yx for b in yy), default=999)
-    sn = max(last[x.split()[-1]], last[y.split()[-1]])
-    if shared:
-        return "confirmed", f"{len(shared)} shared project(s)"
-    if gap <= 2 and sn <= 20:
-        return "probable", f"active {gap}yr apart, distinctive surname"
-    why = ["no shared project"]
-    if gap > 2:
-        why.append(f"{gap}yr apart")
-    if sn > 20:
-        why.append(f"surname shared by {sn} others")
-    return "unsupported", ", ".join(why)
-
-# union-find over name spellings
-parent = {nm: nm for nm in allnames}
-def find(a):
-    while parent[a] != a:
-        parent[a] = parent[parent[a]]
-        a = parent[a]
-    return a
-def union(a, b):
-    ra, rb = find(a), find(b)
-    if ra != rb:
-        parent[max(ra, rb)] = min(ra, rb)
-
-tier, evidence = {}, {}
-FUZZ_MIN = 90
-for key, members in blocks.items():
-    if len(members) < 2:
-        continue
-    for i in range(len(members)):
-        for j in range(i + 1, len(members)):
-            x, y = members[i], members[j]
-            if x == y:
-                continue
-            if key[0] == "first":
-                # same uncommon first name: score the surnames, and demand
-                # corroboration below before anything is merged
-                if fuzz.ratio(x.split()[-1], y.split()[-1]) < 60:
-                    continue
-            elif fuzz.token_sort_ratio(x, y) < FUZZ_MIN:
-                continue
-            t, ev = corroborate(x, y)
-            if t in ("confirmed", "probable"):
-                union(x, y)
-                tier[x] = tier[y] = t
-                evidence[x] = evidence[y] = ev
-            else:
-                tier.setdefault(x, "unsupported")
-                evidence.setdefault(x, ev)
-
-# curated aliases are hand-verified and merge unconditionally
-for nm in allnames:
-    canon = ALIAS.get(nm)
-    if canon and canon in parent:
-        union(nm, canon)
-        tier[nm] = tier[canon] = "confirmed"
-        evidence[nm] = evidence[canon] = "curated roster alias"
-
-CANON = {nm: find(nm) for nm in allnames}
-C["n"] = C["n"].map(lambda x: CANON.get(x, x))
-n_merged = sum(1 for k, v in CANON.items() if k != v)
+# Resolved once, in pipeline/resolve_commenters.py, and shipped as
+# commenter_id on the release. Recomputing it here is what let the
+# repository and the site report different numbers of participants.
+# commenter_id is already the key: the channel frames set "n" from it
+n_merged = 0
 
 # Case roles describe a relationship to one item, never a standing
 # affiliation — same exclusion as rosters.PROPAGATABLE_ROLES.
@@ -863,19 +771,9 @@ h.innerHTML=m.map(x=>`<a href="${{x.u}}"><b>${{x.t}}</b> <span class=pill>${{x.k
 </script>"""
 open(f"{OUT}/index.html", "w").write(page("SF Planning Commission Public Comment", home))
 
-# the download behind the data page. Same redaction as the rendered pages:
-# no addresses, no phone numbers, nothing that is not already on a page.
-_dl = C.copy()
-_dl["text"] = _dl["text"].map(lambda v: html.unescape(scrub(v)) if pd.notna(v) else "")
-_dl["subject"] = _dl["subject"].map(lambda v: html.unescape(scrub(v)) if pd.notna(v) else "")
-_dl["commenter_id"] = _dl["key"]
-_dl["is_campaign"] = _dl["campaign"].notna().astype(int)
-_dl = _dl[["comment_id", "channel", "commenter_id", "name", "id_parent", "date",
-           "year", "position", "role_long", "subject", "text",
-           "is_campaign", "campaign_name"]].rename(columns={"name": "commenter_name"})
-_dl.to_csv(f"{OUT}/comments.csv", index=False)
-print(f"comments.csv: {len(_dl):,} rows, "
-      f"{os.path.getsize(f'{OUT}/comments.csv')/1e6:.0f} MB")
+# No data download here. The Data tab links to the repository, which is the
+# single published copy — the site's own export was a 13-column subset with
+# its own commenter ids, so "download the data" meant two different things.
 
 open(f"{OUT}/robots.txt", "w").write(
     "User-agent: *\n")
