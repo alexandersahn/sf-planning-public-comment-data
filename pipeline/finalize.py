@@ -129,21 +129,32 @@ def main():
     meetings["n_comments"] = meetings["n_comments"].fillna(0).astype(int)
     meetings.to_csv(PUB / "meetings.csv", index=False)
 
-    # summary numbers for the report
-    yr = items["meeting_date"].astype(str).str[:4]
-    signed = com["sign"].notna().sum()
-    named = (com["name_clean"].notna() & (com["name_clean"] != "")).sum()
+    # Summary numbers, counted on the deduplicated rows. Reporting len(com)
+    # here would advertise the fan-out inflation as the size of the dataset —
+    # 76,731 rather than 62,735 — in the same file that tells people to
+    # filter it out.
+    n_dup = int((com["is_duplicate"] == 1).sum())
+    uniq = com[com["is_duplicate"] == 0]
+    signed = uniq["sign"].notna().sum()
+    named = (uniq["name_clean"].notna() & (uniq["name_clean"] != "")).sum()
+    imputed = (int((uniq["sign_source"] == "model").sum())
+               if "sign_source" in uniq else 0)
     lines = [
         "# Dataset summary",
+        "",
+        f"Counts exclude the {n_dup:,} rows flagged `is_duplicate` — copies of the",
+        "same testimony fanned out across the item rows it was recorded against.",
+        "",
         f"- meetings: {len(meetings)} ({meetings['meeting_date'].min()} to {meetings['meeting_date'].max()})",
         f"- agenda items: {len(items_pub)}",
-        f"- public comments: {len(com)}",
-        f"- comments with speaker name: {named} ({named / len(com):.0%})",
-        f"- comments with polarity sign: {signed} ({signed / len(com):.0%})",
-        f"- comments with model-imputed sign: {com['sign_imputed'].notna().sum() if 'sign_imputed' in com else 0}",
-        f"- unique speakers (cleaned names): {com.loc[com['name_clean'] != '', 'name_clean'].nunique()}",
+        f"- public comments: {len(uniq)}",
+        f"- comments with speaker name: {named} ({named / len(uniq):.0%})",
+        f"- comments with polarity sign: {signed} ({signed / len(uniq):.0%})",
+        f"- comments with model-imputed sign: {imputed}",
+        f"- unique speakers (cleaned names): {uniq.loc[uniq['name_clean'] != '', 'name_clean'].nunique()}",
         f"- items matched to DataSF project records: {items['prj_record_id'].notna().sum()}",
         f"- items with coordinates: {items['latitude'].notna().sum()}",
+        f"- duplicate rows flagged (excluded above): {n_dup}",
     ]
     (PUB / "SUMMARY.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))

@@ -9,9 +9,14 @@ and the speaker's role or organizational affiliation. Items are joined to
 San Francisco Planning Department project records (unit counts, uses,
 locations).
 
-**Current coverage:** 1,252 meetings · 25,560 agenda items · 76,731 public
-comments · 24,878 unique speakers · January 1998 – March 2026. Updated
-periodically as new minutes are posted.
+**Current coverage:** 1,252 meetings · 25,560 agenda items ·
+62,735 public comments · 24,852 unique speakers ·
+January 1998 – March 2026. Updated periodically as new minutes are posted.
+
+The comment count excludes 13,996 rows flagged `is_duplicate`: one agenda
+item spanning several case numbers becomes several item rows, and the whole
+speaker list is attached to each, so the same testimony appears more than once.
+Filter `is_duplicate == 0` before counting anything.
 
 ## The data (`public/`)
 
