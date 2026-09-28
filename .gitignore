@@ -17,3 +17,7 @@ replication_original/
 # local scratch
 scratch_*
 *.Rhistory
+
+# build reports and figures are regenerated; not part of the release
+data/validation/
+public/figures/

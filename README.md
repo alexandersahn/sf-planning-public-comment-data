@@ -13,44 +13,6 @@ locations).
 comments · 24,878 unique speakers · January 1998 – March 2026. Updated
 periodically as new minutes are posted.
 
-## The data at a glance
-
-![Public comments per year, stacked by recorded polarity](public/figures/comments_by_year.png)
-
-Staff and commissioner testimony is excluded. Solid colors are the
-commission secretary's own +/−/= notations (systematic from 2005, standard
-from 2013); lighter shades are model-imputed from the comment text where the
-secretary recorded none (mainly 2006–08, when minutes summarized comments in
-transcript style without polarity marks). Grey is not imputable: 1998–2004
-and 2009–2012 minutes mostly list speaker names with no comment text at all.
-Imputed values live in separate columns and never overwrite the
-stenographer's record.
-
-![Opposition share among signed comments](public/figures/polarity_share.png)
-
-![Interest-group and project-team comments over time](public/figures/groups_over_time.png)
-
-Comments from registered neighborhood associations dominated the 2010s
-boom-era hearings, while pro-development (YIMBY/SPUR) commenting emerges
-almost from nothing after 2015.
-
-![Geocoded agenda items colored by comment volume](public/figures/project_map.png)
-
-Regenerate with `python pipeline/make_figures.py`.
-
-This dataset extends and rebuilds the data used in:
-
-> Sahn, Alexander. 2025. "Public Comment and Public Policy."
-> *American Journal of Political Science* 69(2): 685–700.
-> https://doi.org/10.1111/ajps.12900
-
-**It is not the replication archive for that article** — the exact data and
-code behind the published results are permanently archived at the
-[AJPS Dataverse](https://doi.org/10.7910/DVN/WZOC7H). This repository is a
-successor build: the time series runs through the present rather than March
-2022, every meeting was re-scraped and re-parsed with a new pipeline, and
-several bugs in the original data were corrected.
-
 ## The data (`public/`)
 
 | file | unit | contents |

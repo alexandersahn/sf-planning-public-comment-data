@@ -916,20 +916,11 @@ open(f"{OUT}/robots.txt", "w").write(
     "User-agent: *\n")
 open(f"{OUT}/.nojekyll", "w").write("")
 open(f"{OUT}/data.html", "w").write(page("Data", """<h1>Data</h1>
-<table>
-<tr><th>File</th><th>Unit</th><th>Contents</th></tr>
-<tr><td class=mono><a href="comments.csv">comments.csv</a></td><td>comment</td>
-<td>every comment, spoken and written — who made it, the project and hearing it
-concerns, the date, the recorded position, and the text</td></tr>
-</table>
-<p class=sub>Agenda items with outcomes and votes, meeting attendance rosters, the
-project records these are joined to, and the pipeline that builds them all live in the
-<a href="https://github.com/alexandersahn/sf-planning-public-comment-data">data
-repository</a>.</p>
-<div class=note>Written comment is matched to projects by LLM coding plus hand review and
-attached to the project&rsquo;s first hearing on or after the packet date &mdash; only 37%
-of packets match an item heard that same day, because items get continued. Per-item email
-counts are an estimate, not the city&rsquo;s own tally.</div>"""))
+<div class=grp>
+<h3><a href="https://github.com/alexandersahn/sf-planning-public-comment-data">sf-planning-public-comment-data</a></h3>
+<p class=sub>Comments, agenda items with outcomes and votes, meetings, and the
+pipeline that builds them.</p>
+</div>"""))
 
 open(f"{OUT}/about.html", "w").write(page("About", """<h1>About</h1>
 <p class=sub style="max-width:680px;font-size:16px">This website collates and links
