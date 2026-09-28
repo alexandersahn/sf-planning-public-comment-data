@@ -8,6 +8,7 @@ Writes to public/:
   README.md      sources and build notes
 """
 
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -52,8 +53,77 @@ COMMENT_COLS = [
 ]
 
 
-def flag_fanout_duplicates(com, items):
-    """Mark the redundant copies a speaker's testimony fans out into.
+SIGN_POS = {"+": "support", "-": "oppose", "=": "neutral"}
+
+EMAIL_RE = re.compile(r"\S*@[\w-]+(\.[\w-]+)*\.[A-Za-z]{2,}")
+PHONE_RE = re.compile(r"(?<!\d)(\(?\d{3}\)?[-.\s]){1,2}\d{3}[-.\s]\d{4}(?!\d)")
+
+
+def scrub_contacts(df, cols):
+    """Strip addresses and phone numbers from released text.
+
+    The email corpus is scrubbed when it is exported, but spoken comment
+    never was, and stenographers do occasionally transcribe an address a
+    speaker read out. Scrubbing at the release boundary covers both channels
+    and any future one.
+    """
+    for c in cols:
+        if c in df.columns:
+            df[c] = (df[c].astype("string")
+                     .str.replace(EMAIL_RE, "[email removed]", regex=True)
+                     .str.replace(PHONE_RE, "[phone removed]", regex=True))
+    return df
+
+
+def unify_channels(spoken, items):
+    """One table for both channels: spoken testimony and written comment.
+
+    The site used to read spoken comment from here and written comment from a
+    file exported by hand out of another project, so the two could not agree
+    and the repository could not produce what the site displayed. Both now
+    come from this table.
+
+    Channel-specific columns stay rather than being flattened away — the
+    stenographer's polarity marks mean something different from an LLM's
+    reading of an email body, and pooling them would hide that. `position`
+    and `position_source` are the columns that are safe to use across both.
+    """
+    em_path = OUT / "emails.csv"
+    spoken = spoken.copy()
+    spoken["channel"] = "spoken"
+    spoken["comment_id"] = ["s%07d" % i for i in range(len(spoken))]
+    key = items[["item_id", "id_parent"]].drop_duplicates("item_id")
+    spoken = spoken.merge(key, on="item_id", how="left")
+    sign = spoken["sign"].fillna(spoken.get("sign_imputed"))
+    spoken["position"] = sign.map(SIGN_POS)
+    spoken["position_source"] = spoken.get("sign_source")
+    spoken["text"] = spoken["comment"]
+
+    if not em_path.exists():
+        print("no emails.csv; releasing spoken comment only")
+        return spoken
+
+    em = pd.read_csv(em_path, low_memory=False)
+    em["channel"] = "email"
+    em["text"] = em["body"]
+    em["position_source"] = "llm"
+    em["role_long"] = pd.NA
+    em["role_group"] = pd.NA
+    em["role_source"] = pd.NA
+    em["meeting_date"] = em["meeting_date"].astype(str)
+
+    cols = sorted(set(spoken.columns) | set(em.columns))
+    both = pd.concat([spoken.reindex(columns=cols), em.reindex(columns=cols)],
+                     ignore_index=True)
+    lead = ["comment_id", "channel", "meeting_date", "item_id", "id_parent",
+            "record_id", "name_clean", "position", "position_source",
+            "role_long", "role_group", "role_source", "text"]
+    return both[[c for c in lead if c in both.columns]
+                + [c for c in both.columns if c not in lead]]
+
+
+def drop_fanout_duplicates(com, items):
+    """Remove the redundant copies a speaker's testimony fans out into.
 
     One agenda item that spans several case suffixes (2017-008051 was heard
     as SHD/ENV/DNX/CUA/OFA across sub-items 1a-2e) becomes several item rows,
@@ -62,19 +132,19 @@ def flag_fanout_duplicates(com, items):
     once on 30 Van Ness on 2020-05-21 is recorded 14 times, and about a fifth
     of all comment rows are redundant.
 
-    The rows are flagged rather than deleted, so joins on item_id still work
-    and anyone counting comments can filter on one column. `is_duplicate = 0`
-    is the row to keep.
+    The redundant rows are dropped. Keeping them as a flag meant every
+    headline count in the repository disagreed with the site unless the
+    reader knew to filter, which is a trap rather than a feature; the item
+    a comment is attached to is still recorded, just once.
     """
     key = items[["item_id", "id_parent"]].drop_duplicates("item_id")
     c = com.merge(key, on="item_id", how="left")
     dup_key = ["meeting_date", "name_raw", "comment", "id_parent"]
     # only rows that actually resolve to a project can fan out
     resolvable = c["id_parent"].notna() & c["name_raw"].notna()
-    com["is_duplicate"] = 0
-    dup = resolvable & c.duplicated(dup_key, keep="first")
-    com.loc[dup.values, "is_duplicate"] = 1
-    return com
+    dup = (resolvable & c.duplicated(dup_key, keep="first")).values
+    print(f"  dropped {int(dup.sum()):,} fan-out duplicate rows")
+    return com[~dup].copy()
 
 
 def main():
@@ -93,7 +163,9 @@ def main():
 
     com = comments[[c for c in COMMENT_COLS if c in comments.columns]].copy()
     com = com[com["method"] != "same_as_unresolved"]
-    com = flag_fanout_duplicates(com, items)
+    com = drop_fanout_duplicates(com, items)
+    com = unify_channels(com, items)
+    com = scrub_contacts(com, ["text", "comment", "subject"])
     com.to_csv(PUB / "comments.csv", index=False)
 
     # ancillary crosswalk of likely-identical names for downstream linking
@@ -133,28 +205,34 @@ def main():
     # here would advertise the fan-out inflation as the size of the dataset —
     # 76,731 rather than 62,735 — in the same file that tells people to
     # filter it out.
-    n_dup = int((com["is_duplicate"] == 1).sum())
-    uniq = com[com["is_duplicate"] == 0]
-    signed = uniq["sign"].notna().sum()
+    uniq = com
+    sp = uniq[uniq["channel"] == "spoken"]
+    signed = sp["sign"].notna().sum()
     named = (uniq["name_clean"].notna() & (uniq["name_clean"] != "")).sum()
     imputed = (int((uniq["sign_source"] == "model").sum())
                if "sign_source" in uniq else 0)
+
     lines = [
         "# Dataset summary",
         "",
-        f"Counts exclude the {n_dup:,} rows flagged `is_duplicate` — copies of the",
-        "same testimony fanned out across the item rows it was recorded against.",
+        "Fan-out duplicates — copies of the same testimony repeated across the",
+        "item rows it was recorded against — are removed, not flagged.",
         "",
         f"- meetings: {len(meetings)} ({meetings['meeting_date'].min()} to {meetings['meeting_date'].max()})",
         f"- agenda items: {len(items_pub)}",
         f"- public comments: {len(uniq)}",
+        f"  - spoken (meeting minutes, 1998-): "
+        f"{int((uniq['channel'] == 'spoken').sum())}",
+        f"  - written (hearing packets, 2017-): "
+        f"{int((uniq['channel'] == 'email').sum())}",
         f"- comments with speaker name: {named} ({named / len(uniq):.0%})",
-        f"- comments with polarity sign: {signed} ({signed / len(uniq):.0%})",
+        f"- spoken comments with a stenographer polarity sign: {signed}"
+        f" ({signed / max(len(sp), 1):.0%})",
         f"- comments with model-imputed sign: {imputed}",
         f"- unique speakers (cleaned names): {uniq.loc[uniq['name_clean'] != '', 'name_clean'].nunique()}",
         f"- items matched to DataSF project records: {items['prj_record_id'].notna().sum()}",
         f"- items with coordinates: {items['latitude'].notna().sum()}",
-        f"- duplicate rows flagged (excluded above): {n_dup}",
+
     ]
     (PUB / "SUMMARY.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))

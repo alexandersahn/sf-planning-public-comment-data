@@ -32,41 +32,28 @@ import pandas as pd
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "pipeline"))
 
-EMAIL_COLS = ["string_dist_id", "email_from", "name_clean", "id_parent",
-              "position", "meeting_date", "subject", "body"]
-
 ap = argparse.ArgumentParser()
 ap.add_argument("--out", default=os.path.join(ROOT, "site", "_build"))
-ap.add_argument("--emails", default=os.environ.get("SFPC_EMAILS", ""))
-ap.add_argument("--forms", default=os.environ.get("SFPC_FORMS", ""))
 args = ap.parse_args()
 
 OUT = args.out
-for d in ("", "/projects"):
-    os.makedirs(OUT + d, exist_ok=True)
-for _e in (os.listdir(OUT) if os.path.isdir(OUT) else []):
+os.makedirs(OUT, exist_ok=True)
+for _e in os.listdir(OUT):
     if _e == ".git":
         continue
     _t = os.path.join(OUT, _e)
     shutil.rmtree(_t, ignore_errors=True) if os.path.isdir(_t) else os.remove(_t)
 os.makedirs(OUT + "/projects", exist_ok=True)
 
-sp = pd.read_csv(os.path.join(ROOT, "public", "comments.csv"), low_memory=False)
-# the release flags the item fan-out rather than dropping it (finalize.py)
-if "is_duplicate" in sp.columns:
-    sp = sp[sp["is_duplicate"] != 1]
+# Both channels come from the release. They used to come from two places —
+# spoken from here, written from a CSV exported by hand out of another
+# project — which is why the site and the published data disagreed.
+_all = pd.read_csv(os.path.join(ROOT, "public", "comments.csv"), low_memory=False)
 it = pd.read_csv(os.path.join(ROOT, "public", "items.csv.gz"), low_memory=False)
-
-if args.emails and os.path.exists(args.emails):
-    em = pd.read_csv(args.emails)
-    ff = (pd.read_csv(args.forms).drop_duplicates("string_dist_id")
-          if args.forms and os.path.exists(args.forms)
-          else pd.DataFrame(columns=["string_dist_id", "is_form", "form_id",
-                                     "form_name"]))
-else:
-    print("no email corpus given (--emails); building spoken comment only")
-    em = pd.DataFrame(columns=EMAIL_COLS)
-    ff = pd.DataFrame(columns=["string_dist_id", "is_form", "form_id", "form_name"])
+sp = _all[_all["channel"] == "spoken"].copy()
+em = _all[_all["channel"] == "email"].copy()
+em["body"] = em["text"]
+print(f"release: {len(sp):,} spoken, {len(em):,} written")
 
 def _n(s):
     s = str(s or "").lower().strip()
@@ -97,9 +84,7 @@ def norm(s):
     k = _n(raw)
     return ALIAS.get(k, k)
 
-sp = sp.merge(it[["item_id", "id_parent"]], on="item_id", how="left")
-em = em.merge(ff[["string_dist_id", "is_form", "form_id", "form_name"]],
-              on="string_dist_id", how="left")
+# id_parent already ships on the release
 sp["year"] = pd.to_datetime(sp.meeting_date, errors="coerce").dt.year
 em["year"] = pd.to_datetime(em.meeting_date, errors="coerce").dt.year
 # 157 speakers are recorded under a bare role label — "Project Sponsor",
@@ -135,22 +120,15 @@ drop_staff = ((sp.is_staff == 1) | (sp.role_long == "Planning Staff")
 n_staff = int(drop_staff.sum())
 sp = sp[~drop_staff]
 
-# City correspondence is not public comment either.
-em["domain"] = em.email_from.fillna("").str.extract(r"@([\w.-]+)$")[0].str.lower()
-
-# Every 2024 email (902 of them) has a null name_clean: the name-cleaning step
-# never ran on that batch upstream, so the whole year would silently vanish
-# behind the two-token name filter and the series would stop at 2023. Where
-# the address local part plainly encodes a person ("first.last@"), recover it;
-# otherwise keep the comment but leave it off the person pages.
-_local = em.email_from.fillna("").str.extract(r"^([^@]+)@")[0].fillna("")
+# Sender addresses are not in the release, so there is no domain to show or
+# filter on; city correspondence is already excluded upstream. Messages whose
+# sender name never got cleaned keep their comment but are grouped per sender
+# so they never pool into one fictitious person.
+em["domain"] = None
 em["unnamed"] = em.name_clean.isna()
 em["name_clean"] = em.name_clean.fillna("(name not recorded)")
-em["anon_key"] = "anon:" + _local.str.lower()
-gov = em.domain.fillna("").str.endswith(".gov") | em.domain.fillna("").str.contains(
-    r"sfgov|ci\.sf\.ca\.us", na=False, regex=True)
-n_gov = int(gov.sum())
-em = em[~gov]
+em["anon_key"] = "anon:" + em.sender_id.fillna("unknown").astype(str)
+n_gov = 0
 
 SIGN = {"+": "support", "-": "oppose", "=": "neutral"}
 a = pd.DataFrame({
@@ -161,23 +139,10 @@ a = pd.DataFrame({
     "text": sp.comment, "subject": None, "domain": None,
     "campaign": None, "campaign_name": None,
 })
-# The shipped form detector groups on subject-line similarity, which merges
-# opposing campaigns that share a slogan: "Save the Castro Theatre" was the
-# subject of both the pro-renovation and the preservationist letter drives,
-# giving one 851-email "campaign" split 427 support / 424 oppose. Within a
-# body cluster the coded position is ~99% consistent (only 3 of 172 Castro
-# clusters span both), so the coding was never the problem — the grouping
-# was. Keep form_name as the campaign and split only the 11 mixed ones, by
-# position; re-keying everything on body text instead over-fragments 80
-# campaigns into 780.
-_mixed = em[em.is_form == 1].groupby("form_name").position.agg(
-    lambda x: (x == "support").any() and (x == "oppose").any())
-_mixed = set(_mixed[_mixed].index)
-em["campaign"] = em.form_name.where(em.is_form == 1)
-_split = em.campaign.isin(_mixed)
-em.loc[_split, "campaign"] = (em.loc[_split, "campaign"] + " ["
-                              + em.loc[_split, "position"].fillna("unclear") + "]")
-em["campaign_label"] = em.campaign
+# Campaign grouping is computed in pipeline/build_emails.py and shipped on
+# the release, so the site and the data cannot disagree about what counts as
+# a campaign.
+em["campaign_label"] = em["campaign"]
 
 b = pd.DataFrame({
     "channel": "email", "name": em.name_clean, "n": em["n"],

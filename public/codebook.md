@@ -67,8 +67,31 @@ footprints.
 
 ## comments.csv
 
+One row per public comment, both channels: spoken testimony parsed from the
+meeting minutes (1998–present) and written comment parsed from the hearing
+packets (2017–2024). `channel` says which.
+
+Fan-out duplicates are removed, not flagged: an agenda item spanning several
+case numbers used to produce several item rows with the whole speaker list
+attached to each, so one person speaking once appeared up to 14 times.
+
+Columns that apply to one channel only are blank for the other. `position`
+and `position_source` are the two that are safe to use across both — but a
+stenographer's recorded `+` and a language model's reading of an email body
+are different kinds of evidence, and `position_source` is how you tell them
+apart.
+
 | variable | description |
 |---|---|
+| comment_id | stable id; `s…` spoken, `e…` written |
+| channel | `spoken` / `email` |
+| position | support / oppose / neutral, harmonised across channels |
+| position_source | `stenographer`, `model`, `role` (spoken) or `llm` (written) |
+| sender_id | written comment only: salted digest of the sender's address. The addresses themselves are not published; this preserves linkage between messages from the same person |
+| subject | written comment only |
+| is_campaign, campaign | written comment only: near-identical messages from an organised letter-writing drive, and which drive |
+| item_lag_days, item_heard_as_calendared | written comment only: emails arrive before a hearing and items get continued, so the item link is derived as the project's first hearing on or after the packet date. Only 37% were heard on the packet date itself |
+| text | the stenographer's summary (spoken) or the message body (written). Email addresses and phone numbers are redacted |
 | item_id | agenda item the comment was made on (key into items.csv) |
 | meeting_date, record_id, section, item_num | context copied from the item |
 | speaker_order | order within the item's speaker list |
@@ -82,7 +105,6 @@ footprints.
 | is_staff | 1 if the speaker appears in the minutes' own "STAFF IN ATTENDANCE" roster (same meeting or any meeting, 1998–2026) or the 2022 Planning staff directory |
 | is_commissioner | 1 if the speaker is listed among that meeting's "COMMISSIONERS PRESENT". **Always 0 in practice**: commissioners speak from the dais and are recorded in the MOTION and ACTION blocks, not in the SPEAKERS lists this table is built from. The column is kept so the filter `is_staff != 1 & is_commissioner != 1` stays correct if that ever changes |
 | role_long | speaker role/interest-group classification (taxonomy from Sahn's AJPS pipeline, extended): Planning Staff, Commissioner, Supervisor's Office, Mayor's Office, City Agency, DR Team, Project Team, Legal, Neighborhood Association, Commercial Association, Tenant Association, Construction, Labor, YIMBY, Pro-Housing Advocacy, SPUR, Slow Growth, Anti-Displacement, Historic Preservation, Affordable Housing Developer, Religious, Social Services, Race/Immigration/LGBTQ Groups, Community Benefit District, Chamber of Commerce |
-| is_duplicate | 1 if this row is a redundant copy of another comment. One agenda item spanning several case suffixes (2017-008051 was heard as SHD/ENV/DNX/CUA/OFA across sub-items 1a–2e) becomes several item rows, and the whole speaker list is attached to each; 456 item slots are also parsed twice under two `section_group` values. One person speaking once on 30 Van Ness on 2020-05-21 is recorded 14 times. 13,996 of 76,731 rows (18%) are redundant. **Filter `is_duplicate == 0` for any count of comments, speakers or positions.** The rows are flagged rather than deleted so that joins on `item_id` still return every item the testimony was recorded against |
 | role_source | how `role_long` was determined — see the note below. Values: `case_role`, `attendance`, `roster_curated`, `stated_org`, `stated_role_title`, `stated_comment`, `nhood_roster`, `lookup_role`, `roster_derived`, `manual` |
 | role_group | coarse grouping of role_long: Planning Staff, Project Team, DR Team, Neighborhood Association, Business Groups, Housing Interest Groups, Pro-Development Interest Groups, Social Interest Groups, Inter-Governmental |
 
